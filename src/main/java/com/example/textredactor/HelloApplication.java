@@ -1,54 +1,39 @@
 package com.example.textredactor;
 
+import com.example.textredactor.engine.Engine;
+import com.example.textredactor.pages.General;
+import com.example.textredactor.pages.Settings;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class HelloApplication extends Application {
+    private static Map<String, Node> pages = new HashMap<>();
+    private static VBox vBox;
+
     @Override
     public void start(Stage stage) throws IOException {
+        stage.setWidth(800);
+        stage.setHeight(600);
+        pages.put("General", new General());
+        pages.put("Settings", new Settings());
 
-        CreateFile createFile = new CreateFile();
+        CreateFile createFile = CreateFile.init();
 
         Engine.setShablon(createFile.getText());
 
-        VBox gBox = new VBox(10);
-        gBox.setStyle("-fx-padding: 10;");
-        VBox.setVgrow(gBox, Priority.ALWAYS);
-        HBox.setHgrow(gBox, Priority.ALWAYS);
+        vBox = new VBox();
 
-        TextArea textArea = new TextArea();
-        Button button = new Button("Submit");
-        button.setOnAction(e -> {
-            textArea.setText(Engine.startEngine(textArea.getText()));
-        });
-        Button save = new Button("Save");
-        save.setOnAction(e -> {
-            Clipboard clipboard = Clipboard.getSystemClipboard();
-            ClipboardContent content = new ClipboardContent();
-            content.putString(textArea.getText());
-            clipboard.setContent(content);
-            textArea.setText("");
-        });
+        showCard("General");
 
-        HBox hBox = new HBox(10);
-        hBox.getChildren().addAll(button, save);
-
-        gBox.getChildren().addAll(textArea,hBox);
-
-        Scene scene = new Scene(gBox);
+        Scene scene = new Scene(vBox);
         scene.getStylesheets().add(
                 Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm()
         );
@@ -56,5 +41,10 @@ public class HelloApplication extends Application {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void showCard(String name) {
+        Node node = pages.get(name);
+        vBox.getChildren().setAll(node);
     }
 }

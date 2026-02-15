@@ -4,6 +4,7 @@ module com.example.textredactor {
 
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
+    requires javafx.graphics;
 
     opens com.example.textredactor to javafx.fxml;
     exports com.example.textredactor;
