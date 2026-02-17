@@ -1,63 +1,64 @@
 package com.example.textredactor.pages;
 
-import com.example.textredactor.HelloApplication;
 import com.example.textredactor.engine.Engine;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import com.example.textredactor.ui.MainMenu;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
-public class General extends VBox {
+public class General extends HBox {
     private Engine engine = new Engine();
 
     public General() {
-        super(10);
-        setStyle("-fx-padding: 10;");
-        VBox.setVgrow(this, Priority.ALWAYS);
-        HBox.setHgrow(this, Priority.ALWAYS);
 
-        VBox top = new VBox(10);
+        /* ===== ROOT ===== */
+        setSpacing(0);
+        setPrefSize(900, 600);
 
+        /* ===== LEFT MENU ===== */
+        MainMenu menu = new MainMenu(12);
+        menu.getMain().getStyleClass().add("active");
+
+        /* ===== CONTENT ===== */
+        VBox content = new VBox(12);
+        content.setPadding(new Insets(15));
+        content.setFillWidth(true);
+
+        // Большое поле ввода
         TextArea textArea = new TextArea();
+        textArea.setPromptText("Paste or write your text here...");
+        VBox.setVgrow(textArea, Priority.ALWAYS);
 
-        HBox lettersSaver = new HBox(10);
-        lettersSaver.setPrefWidth(200);
+        // Нижняя панель
+        TextField fileNameField = new TextField();
+        fileNameField.setPromptText("Filename");
 
-        Button settings = new Button("Settings");
-        settings.setOnAction(e -> {
-            HelloApplication.showCard("Settings");
+        Button submitBtn = new Button("Submit");
+        submitBtn.getStyleClass().add("primary");
+        submitBtn.setOnAction(e -> {
+            textArea.setText(engine.Start(textArea.getText(), fileNameField.getText()));
         });
 
-        top.getChildren().addAll(textArea, lettersSaver);
-
-        TextField buckUp = new TextField();
-        buckUp.setPromptText("SaveFile Name");
-
-        Button button = new Button("Submit");
-        button.setOnAction(e -> {
-            textArea.setText(engine.Start(textArea.getText(), buckUp.getText()));
-        });
-
-
-
-        Button save = new Button("Save");
-        save.setOnAction(e -> {
+        Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
-            ClipboardContent content = new ClipboardContent();
-            content.putString(textArea.getText());
-            clipboard.setContent(content);
+            ClipboardContent saveContent = new ClipboardContent();
+            saveContent.putString(textArea.getText());
+            clipboard.setContent(saveContent);
             textArea.setText("");
         });
 
-        Button library = new Button("Library");
+        HBox bottomBar = new HBox(10, fileNameField, submitBtn, saveBtn);
+        bottomBar.setPadding(new Insets(5, 0, 0, 0));
 
-        HBox hBox = new HBox(10);
-        hBox.getChildren().addAll(button, buckUp, save, settings, library);
+        HBox.setHgrow(fileNameField, Priority.ALWAYS);
 
-        getChildren().addAll(top,hBox);
+        content.getChildren().addAll(textArea, bottomBar);
+
+        /* ===== ADD TO ROOT ===== */
+        getChildren().addAll(menu, content);
+        HBox.setHgrow(content, Priority.ALWAYS);
     }
 }

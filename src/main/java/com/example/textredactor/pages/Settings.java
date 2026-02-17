@@ -2,25 +2,36 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.CreateFile;
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.ui.MainMenu;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Settings extends VBox {
+public class Settings extends HBox {
     private CreateFile createFile = CreateFile.init();
     private List<Block> blockList = new ArrayList<>();
+    private VBox left =  new VBox();
+    private VBox right = new VBox();
     private VBox vBox;
 
     public Settings() {
-        setStyle("-fx-padding: 10px;");
+        setStyle("-fx-padding: 0px;");
+        getChildren().addAll(left,right);
+        HBox.setHgrow(right, Priority.ALWAYS);
 
+        MainMenu menu = new MainMenu(12);
+        menu.getSettingsBtn().getStyleClass().add("active");
+        VBox.setVgrow(menu, Priority.ALWAYS);
+
+        left.getChildren().add(menu);
         // Блок СкроллПейн
         try {
             setSettings();
@@ -53,7 +64,7 @@ public class Settings extends VBox {
 
         bot.getChildren().addAll(saveSettings, add);
 
-        getChildren().addAll(bot);
+        right.getChildren().addAll(bot);
     }
 
     private class Block extends HBox {
@@ -133,9 +144,12 @@ public class Settings extends VBox {
         } catch (IOException e) {
             throw new RuntimeException("Can't read file words: " + fileName, e);
         }
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
         scrollPane.setContent(vBox);
         vBox.getChildren().addAll(blockList);
-        getChildren().add(scrollPane);
+        right.getChildren().add(scrollPane);
     }
 
     private boolean findEmpty(Block block) {
