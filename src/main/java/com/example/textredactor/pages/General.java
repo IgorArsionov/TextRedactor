@@ -9,56 +9,77 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
 
 public class General extends HBox {
-    private Engine engine = new Engine();
+    private final Engine engine = new Engine();
+    private final TextArea textArea = new TextArea();
+    private final TextField fileNameField = new TextField();
 
     public General() {
-
-        /* ===== ROOT ===== */
         setSpacing(0);
         setPrefSize(900, 600);
 
-        /* ===== LEFT MENU ===== */
         MainMenu menu = new MainMenu(12);
         menu.getMain().getStyleClass().add("active");
 
-        /* ===== CONTENT ===== */
-        VBox content = new VBox(12);
-        content.setPadding(new Insets(15));
-        content.setFillWidth(true);
+        VBox content = initContent();
 
-        // Большое поле ввода
-        TextArea textArea = new TextArea();
-        textArea.setPromptText("Paste or write your text here...");
-        VBox.setVgrow(textArea, Priority.ALWAYS);
+        getChildren().addAll(menu, content);
+        HBox.setHgrow(content, Priority.ALWAYS);
+    }
 
-        // Нижняя панель
-        TextField fileNameField = new TextField();
-        fileNameField.setPromptText("Filename");
-
+    private Button initSubmitBtn() {
         Button submitBtn = new Button("Submit");
         submitBtn.getStyleClass().add("primary");
         submitBtn.setOnAction(e -> {
             textArea.setText(engine.Start(textArea.getText(), fileNameField.getText()));
+            if(!fileNameField.getText().isEmpty()) {
+                fileNameField.clear();
+            }
         });
+        return submitBtn;
+    }
 
+    private Button initSaveBtn() {
         Button saveBtn = new Button("Save");
         saveBtn.setOnAction(e -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent saveContent = new ClipboardContent();
             saveContent.putString(textArea.getText());
             clipboard.setContent(saveContent);
-            textArea.setText("");
         });
 
-        HBox bottomBar = new HBox(10, fileNameField, submitBtn, saveBtn);
+        return saveBtn;
+    }
+
+    private Button initClearBtn() {
+        Button clearBtn = new Button("X");
+        clearBtn.getStyleClass().add("clear");
+        clearBtn.setOnAction(e -> {
+            textArea.setText("");
+        });
+        return clearBtn;
+    }
+
+    private VBox initContent() {
+        VBox content = new VBox(12);
+        content.setPadding(new Insets(15));
+        content.setFillWidth(true);
+
+        textArea.setPromptText("Paste or write your text here...");
+        VBox.setVgrow(textArea, Priority.ALWAYS);
+
+        fileNameField.setPromptText("Filename");
+
+        Button submitBtn = initSubmitBtn();
+        Button saveBtn = initSaveBtn();
+        Button clearBtn = initClearBtn();
+
+        HBox bottomBar = new HBox(10, fileNameField, submitBtn, saveBtn, clearBtn);
         bottomBar.setPadding(new Insets(5, 0, 0, 0));
 
         HBox.setHgrow(fileNameField, Priority.ALWAYS);
 
         content.getChildren().addAll(textArea, bottomBar);
 
-        /* ===== ADD TO ROOT ===== */
-        getChildren().addAll(menu, content);
-        HBox.setHgrow(content, Priority.ALWAYS);
+        return content;
     }
 }

@@ -2,11 +2,11 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.CreateFile;
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.ui.Block;
 import com.example.textredactor.ui.MainMenu;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -16,127 +16,79 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Settings extends HBox {
-    private CreateFile createFile = CreateFile.init();
-    private List<Block> blockList = new ArrayList<>();
-    private VBox left =  new VBox();
-    private VBox right = new VBox();
+
+    private final CreateFile createFile = CreateFile.init();
+    private final List<Block> blockList = new ArrayList<>();
+
+    private final VBox left = new VBox();
+    private final VBox right = new VBox();
+
     private VBox vBox;
+    private VBox card;   // <<< добавили
 
     public Settings() {
         setStyle("-fx-padding: 0px;");
-        getChildren().addAll(left,right);
+        getChildren().addAll(left, right);
         HBox.setHgrow(right, Priority.ALWAYS);
 
-        MainMenu menu = new MainMenu(12);
-        menu.getSettingsBtn().getStyleClass().add("active");
-        VBox.setVgrow(menu, Priority.ALWAYS);
-
-        left.getChildren().add(menu);
-        // Блок СкроллПейн
-        try {
-            setSettings();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        // конец Блок СкроллПейн
-
-        VBox bot = new VBox(10);
-        Button saveSettings = new Button("Save and exit");
-        saveSettings.setOnAction(e -> {
-            StringBuilder builder = new StringBuilder();
-            for (Block block : blockList) {
-                if (findEmpty(block)) {
-                    continue;
-                }
-                builder.append(block.toString());
-                builder.append("\n");
-            }
-            createFile.writeFile(builder.toString());
-            HelloApplication.showCard("General");
-        });
-
-        Button add = new Button("Add++");
-        add.setOnAction(e -> {
-            blockList.add(new Block(new String[]{"", " ; "}));
-            vBox.getChildren().clear();
-            vBox.getChildren().addAll(blockList);
-        });
-
-        bot.getChildren().addAll(saveSettings, add);
-
-        right.getChildren().addAll(bot);
+        initSidebar();
+        initContent();
     }
 
-    private class Block extends HBox {
-        private TextField wordField;
-        private TextField positionField;
-        private TextField letterField;
-
-        private Block(String[] data) {
-            super(10);
-            wordField = new TextField();
-            wordField.setPromptText("Слово");
-            wordField.setPrefColumnCount(15);
-            wordField.setText(data[0]);
-            wordField.setPrefWidth(100);
-
-            positionField = new TextField();
-            positionField.setPromptText("Позиция");
-            positionField.setPrefColumnCount(3);
-            positionField.setText(data[1].split(";")[0]);
-
-            letterField = new TextField();
-            letterField.setPromptText("Буква");
-            letterField.setPrefColumnCount(15);
-            letterField.setText(data[1].split(";")[1]);
-            letterField.setPrefWidth(100);
-
-            CheckBox autoPositionCheckBox = new CheckBox("All");
-
-            autoPositionCheckBox
-                    .selectedProperty()
-                    .addListener((obs, oldVal, newVal) -> {
-                if (newVal) {
-                    positionField.setText("0");
-                    positionField.setDisable(true);
-                } else {
-                    positionField.setDisable(false);
-                }
-            });
-
-            getChildren().addAll(wordField, positionField, letterField, autoPositionCheckBox);
-        }
-
-        public String getWordField() {
-            return wordField.getText();
-        }
-
-        public String getPositionField() {
-            return positionField.getText();
-        }
-
-        public String getLetterField() {
-            return letterField.getText();
-        }
-
-        public String toString() {
-            return wordField.getText() + "=" + positionField.getText() + ";" + letterField.getText();
-        }
+    private void initSidebar() {
+        MainMenu mainMenu = new MainMenu(12);
+        mainMenu.getSettingsBtn().getStyleClass().add("active");
+        VBox.setVgrow(mainMenu, Priority.ALWAYS);
+        left.getChildren().add(mainMenu);
     }
 
-    private void setSettings() throws FileNotFoundException {
-        String fileName = "words.txt";
-        File file = new File(fileName);
+    private void initContent() {
+        card = createCard();
+
+        initScrollPane();
+        initWords();
+        renderBlocks();
+
+        HBox bottomPanelMenu = new HBox(10);
+        bottomPanelMenu.setPadding(new Insets(10, 0, 0, 0));
+
+        Button saveSettings = initSaveBtn();
+        Button addNewWord = initAddBtn();
+
+        bottomPanelMenu.getChildren().addAll(saveSettings, addNewWord);
+
+        card.getChildren().add(bottomPanelMenu);
+
+        right.getChildren().add(card);
+    }
+
+    private void initScrollPane() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("scroll-pane");
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
         vBox = new VBox(10);
         vBox.setStyle("-fx-padding: 5px;");
 
+        scrollPane.setContent(vBox);
+
+        card.getChildren().add(scrollPane);
+    }
+
+    private void initWords() {
+        String fileName = "words.txt";
+        File file = new File(fileName);
+
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
+
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.length() != 0) {
+
+                if (!line.isEmpty()) {
                     String[] strings = line.split("=");
                     blockList.add(new Block(strings));
                 }
@@ -144,12 +96,45 @@ public class Settings extends HBox {
         } catch (IOException e) {
             throw new RuntimeException("Can't read file words: " + fileName, e);
         }
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        scrollPane.setContent(vBox);
+    }
+
+    private void renderBlocks() {
         vBox.getChildren().addAll(blockList);
-        right.getChildren().add(scrollPane);
+    }
+
+    private Button initAddBtn() {
+        Button buttonAddNewBlock = new Button("Add++");
+
+        buttonAddNewBlock.setOnAction(e -> {
+            Block newBlock = new Block(new String[]{"", " ; "});
+            blockList.add(newBlock);
+            vBox.getChildren().add(newBlock);
+        });
+
+        return buttonAddNewBlock;
+    }
+
+    private Button initSaveBtn() {
+        Button saveSettings = new Button("Save and exit");
+        saveSettings.getStyleClass().add("primary");
+
+        saveSettings.setOnAction(e -> {
+            StringBuilder builder = new StringBuilder();
+
+            for (Block block : blockList) {
+                if (findEmpty(block)) {
+                    continue;
+                }
+
+                builder.append(block.toString());
+                builder.append("\n");
+            }
+
+            createFile.writeFile(builder.toString());
+            HelloApplication.showCard("General");
+        });
+
+        return saveSettings;
     }
 
     private boolean findEmpty(Block block) {
@@ -158,5 +143,15 @@ public class Settings extends HBox {
         String a3 = block.getWordField().trim();
 
         return a1.isEmpty() || a2.isEmpty() || a3.isEmpty();
+    }
+
+    private VBox createCard() {
+        VBox card = new VBox(15);
+        card.getStyleClass().add("content-card");
+        card.setPadding(new Insets(15));
+
+        VBox.setVgrow(card, Priority.ALWAYS);
+
+        return card;
     }
 }

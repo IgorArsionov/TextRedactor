@@ -9,7 +9,7 @@ public class Block extends HBox {
     private TextField positionField;
     private TextField letterField;
 
-    private Block(String[] data) {
+    public Block(String[] data) {
         super(10);
         wordField = new TextField();
         wordField.setPromptText("Слово");
