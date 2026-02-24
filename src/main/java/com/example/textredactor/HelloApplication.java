@@ -2,6 +2,7 @@ package com.example.textredactor;
 
 import com.example.textredactor.engine.Engine;
 import com.example.textredactor.pages.General;
+import com.example.textredactor.pages.Letters;
 import com.example.textredactor.pages.Settings;
 import javafx.application.Application;
 import javafx.scene.Node;
@@ -24,6 +25,7 @@ public class HelloApplication extends Application {
         stage.setHeight(600);
         pages.put("General", new General());
         pages.put("Settings", new Settings());
+        pages.put("Letters", new Letters());
 
         CreateFile createFile = CreateFile.init();
 

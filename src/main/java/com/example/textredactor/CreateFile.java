@@ -81,4 +81,18 @@ public class CreateFile {
             throw new RuntimeException(e);
         }
     }
+
+    public File[] getFiles() {
+        return folder.listFiles();
+    }
+
+    public String getLetterFromFile(File file) {
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            builder.append(reader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return builder.toString();
+    }
 }

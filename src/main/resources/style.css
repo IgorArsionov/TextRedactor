@@ -219,3 +219,39 @@
 .content-card {
     -fx-background-color: transparent;
 }
+
+/* === Letter Item === */
+.letter-item {
+    -fx-background-color: linear-gradient(
+            to bottom,
+            #2a2c30,
+            #24262a
+    );
+
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    -fx-border-color: rgba(255,255,255,0.06);
+
+    -fx-padding: 10 14;
+}
+
+/* Заголовок письма */
+.letter-item Label {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 14px;
+}
+
+/* Кнопка удаления */
+.button.danger {
+    -fx-background-color: linear-gradient(
+            to bottom,
+            #ff5c5c,
+            #d63f3f
+    );
+    -fx-text-fill: white;
+}
+
+.button.danger:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255,92,92,0.6), 10, 0.3, 0, 0);
+}

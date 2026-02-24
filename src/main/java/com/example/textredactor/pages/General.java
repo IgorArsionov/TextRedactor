@@ -21,7 +21,7 @@ public class General extends HBox {
         menu.getMain().getStyleClass().add("active");
 
         VBox content = initContent();
-
+        //TODO: Сделать защиту от одинаковых имен для сохранения писем
         getChildren().addAll(menu, content);
         HBox.setHgrow(content, Priority.ALWAYS);
     }

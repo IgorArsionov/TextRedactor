@@ -31,6 +31,10 @@ public class MainMenu extends VBox {
             HelloApplication.showCard("General");
         });
 
+        libraryBtn.setOnAction(e -> {
+            HelloApplication.showCard("Letters");
+        });
+
         getChildren().addAll(main, settingsBtn, libraryBtn);
     }
 
