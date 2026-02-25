@@ -1,6 +1,8 @@
 package com.example.textredactor.pages;
 
+import com.example.textredactor.HelloApplication;
 import com.example.textredactor.engine.Engine;
+import com.example.textredactor.engine.model.Letter;
 import com.example.textredactor.ui.LetterItem;
 import com.example.textredactor.ui.MainMenu;
 import javafx.geometry.Insets;
@@ -63,10 +65,17 @@ public class Letters extends HBox {
         for (int i = 0; i < Engine.getLettersList().size(); i++) {
             LetterItem letterItem = new LetterItem(Engine.getLettersList().get(i));
             int step = i;
+            Letter letterStep = Engine.getLettersList().get(step);
             letterItem.getDelete().setOnAction(event -> {
-                Engine.deleteLetter(Engine.getLettersList().get(step).getFile());
-                Engine.getLettersList().remove(Engine.getLettersList().get(step));
+                Engine.deleteLetter(letterStep.getFile());
+                Engine.getLettersList().remove(letterStep);
                 initLettersItem();
+            });
+
+            letterItem.getOpen().setOnAction(event -> {
+                Text text = (Text) HelloApplication.getCard("Text");
+                text.setLetter(letterStep);
+                HelloApplication.showCard("Text");
             });
             listBox.getChildren().add(letterItem);
 

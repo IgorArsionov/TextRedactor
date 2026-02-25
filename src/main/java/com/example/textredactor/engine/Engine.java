@@ -8,9 +8,12 @@ import com.example.textredactor.engine.service.WordRefactorService;
 import com.example.textredactor.engine.service.impl.ReaderServiceImpl;
 import com.example.textredactor.engine.service.impl.SaveLettersImpl;
 import com.example.textredactor.engine.service.impl.WordRefactorServiceImpl;
-
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Engine {
     public static Map<String, String> shablon = new HashMap<String, String>();
@@ -30,7 +33,7 @@ public class Engine {
         for (int i = 0; i < list.size(); i++) {
             sb.append(list.get(i).toString()).append(" ");
         }
-        //TODO: Сохранение текста
+
         if (!nameFile.isEmpty()) {
             saveLetters.saveLetters(nameFile, sb.toString());
         }

@@ -12,12 +12,15 @@ public class General extends HBox {
     private final Engine engine = new Engine();
     private final TextArea textArea = new TextArea();
     private final TextField fileNameField = new TextField();
+    private final MainMenu menu = new MainMenu(12);
 
     public General() {
         setSpacing(0);
         setPrefSize(900, 600);
 
-        MainMenu menu = new MainMenu(12);
+        HBox.setHgrow(this, Priority.ALWAYS);
+        VBox.setVgrow(this, Priority.ALWAYS);
+
         menu.getMain().getStyleClass().add("active");
 
         VBox content = initContent();
@@ -34,17 +37,19 @@ public class General extends HBox {
             if(!fileNameField.getText().isEmpty()) {
                 fileNameField.clear();
             }
+            menu.showSuccess("Слова изменены ");
         });
         return submitBtn;
     }
 
     private Button initSaveBtn() {
-        Button saveBtn = new Button("Save");
+        Button saveBtn = new Button("Copy");
         saveBtn.setOnAction(e -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent saveContent = new ClipboardContent();
             saveContent.putString(textArea.getText());
             clipboard.setContent(saveContent);
+            menu.showSuccess("Скопированно");
         });
 
         return saveBtn;
@@ -81,5 +86,9 @@ public class General extends HBox {
         content.getChildren().addAll(textArea, bottomBar);
 
         return content;
+    }
+
+    public MainMenu getMenu() {
+        return menu;
     }
 }

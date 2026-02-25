@@ -10,7 +10,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +21,14 @@ public class Settings extends HBox {
 
     private final VBox left = new VBox();
     private final VBox right = new VBox();
+    private final MainMenu mainMenu = new MainMenu(12);
 
     private VBox vBox;
-    private VBox card;   // <<< добавили
+    private VBox card;
 
     public Settings() {
+        HBox.setHgrow(this, Priority.ALWAYS);
+        VBox.setVgrow(this, Priority.ALWAYS);
         setStyle("-fx-padding: 0px;");
         getChildren().addAll(left, right);
         HBox.setHgrow(right, Priority.ALWAYS);
@@ -36,7 +38,6 @@ public class Settings extends HBox {
     }
 
     private void initSidebar() {
-        MainMenu mainMenu = new MainMenu(12);
         mainMenu.getSettingsBtn().getStyleClass().add("active");
         VBox.setVgrow(mainMenu, Priority.ALWAYS);
         left.getChildren().add(mainMenu);
@@ -132,6 +133,8 @@ public class Settings extends HBox {
 
             createFile.writeFile(builder.toString());
             HelloApplication.showCard("General");
+            General general = (General) HelloApplication.getCard("General");
+            general.getMenu().showSuccess("Настройки сохранены");
         });
 
         return saveSettings;

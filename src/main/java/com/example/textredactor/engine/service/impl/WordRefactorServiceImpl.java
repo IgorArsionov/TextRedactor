@@ -21,25 +21,17 @@ public class WordRefactorServiceImpl implements WordRefactorService {
         while (end >= start && !Character.isLetter(text.charAt(end))) {
             end--;
         }
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '—') {
-                count++;
-            }
-        }
 
         before = text.substring(0, start);
         after = text.substring(end + 1);
         word = text.substring(start, end + 1);
         StringBuilder builder = new StringBuilder(text);
         if (Engine.shablon.containsKey(word.toLowerCase())) {
-            System.out.println("=========");
             int x = Integer.parseInt(Engine.shablon.get(word.toLowerCase()).split(";")[0]);
             if (x == 0) {
                 word = Engine.shablon.get(word.toLowerCase()).split(";")[1];
-                System.out.println("Заменено на: " + word);
             } else {
                 builder.insert(x,Engine.shablon.get(word.toLowerCase()).split(";")[1]);
-                System.out.println(word + " :Переделано в: " + builder.toString());
                 word = builder.toString();
             }
 
