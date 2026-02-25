@@ -74,7 +74,15 @@ public class CreateFile {
 
     public void writeFileByName(String text, String name) {
         File newFile = CreateFileByName(name);
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, false))) {
+        writeToFile(newFile, text);
+    }
+
+    public void writeFileByFile(String text, File file) {
+        writeToFile(file, text);
+    }
+
+    private void writeToFile(File file, String text) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             bw.write(text);
             System.out.println("Successfully wrote to the file." + file.getPath());
         } catch (IOException e) {
@@ -89,7 +97,10 @@ public class CreateFile {
     public String getLetterFromFile(File file) {
         StringBuilder builder = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            builder.append(reader.readLine());
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line).append("\n");
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

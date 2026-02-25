@@ -3,7 +3,6 @@ package com.example.textredactor.engine.service.impl;
 import com.example.textredactor.CreateFile;
 import com.example.textredactor.engine.model.Letter;
 import com.example.textredactor.engine.service.ReaderService;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

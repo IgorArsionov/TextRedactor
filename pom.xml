@@ -6,7 +6,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>TextRedactor</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>TextRedactor</name>
 
     <properties>

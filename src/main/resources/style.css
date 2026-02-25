@@ -255,3 +255,54 @@
 .button.danger:hover {
     -fx-effect: dropshadow(gaussian, rgba(255,92,92,0.6), 10, 0.3, 0, 0);
 }
+
+.editor-container {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-padding: 10px;
+    -fx-background-radius: 8px;
+}
+
+.editor-text {
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+}
+
+.top-bar {
+    -fx-background-color: #1e1f22;
+    -fx-padding: 10 15;
+    -fx-background-radius: 10;
+}
+
+.top-bar .label {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 14px;
+}
+
+.unsaved-label {
+    -fx-text-fill: #ffcc66;
+    -fx-font-size: 11px;
+}
+
+.menu-notification {
+    -fx-padding: 8 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-opacity: 0.95;
+}
+
+.menu-notification-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+/* Зеленый */
+.menu-notification.success {
+    -fx-background-color: rgba(60, 160, 90, 0.25);
+    -fx-border-color: rgba(60, 160, 90, 0.5);
+}
+
+/* Желтый */
+.menu-notification.warn {
+    -fx-background-color: rgba(200, 170, 60, 0.25);
+    -fx-border-color: rgba(200, 170, 60, 0.5);
+}

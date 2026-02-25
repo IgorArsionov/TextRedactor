@@ -14,10 +14,9 @@ public class SideBarButton extends Button {
     private final Label textLabel;
 
     public SideBarButton(String text, String iconPath) {
-        // Текст
         textLabel = new Label(text);
         setIconView(iconPath);
-        // Контейнер
+
         HBox content = new HBox(10, iconView, textLabel);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setPadding(new Insets(6, 10, 6, 10));
@@ -25,16 +24,14 @@ public class SideBarButton extends Button {
         setMaxWidth(Double.MAX_VALUE);
 
         setGraphic(content);
-        setText(null); // ❗ важно
+        setText(null);
         setAlignment(Pos.CENTER_LEFT);
 
         getStyleClass().add("side-button");
     }
 
     public SideBarButton(String text) {
-        // Текст
         textLabel = new Label(text);
-        // Контейнер
         HBox content = new HBox(10, textLabel);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setPadding(new Insets(6, 10, 6, 10));
@@ -42,14 +39,13 @@ public class SideBarButton extends Button {
         setMaxWidth(Double.MAX_VALUE);
 
         setGraphic(content);
-        setText(null); // ❗ важно
+        setText(null);
         setAlignment(Pos.CENTER_LEFT);
 
         getStyleClass().add("side-button");
     }
 
     private void setIconView(String iconPath) {
-        // Иконка
         iconView = new ImageView(
                 new Image(getClass().getResource(iconPath).toExternalForm())
         );

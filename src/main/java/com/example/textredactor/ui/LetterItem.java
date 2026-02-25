@@ -1,6 +1,5 @@
 package com.example.textredactor.ui;
 
-import com.example.textredactor.engine.Engine;
 import com.example.textredactor.engine.model.Letter;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +10,7 @@ import javafx.scene.layout.Region;
 
 public class LetterItem extends HBox {
     private Button delete;
+    private Button open;
 
     public LetterItem(Letter letter) {
         super(10);
@@ -23,7 +23,7 @@ public class LetterItem extends HBox {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button open = new Button("Open");
+        open = new Button("Open");
         open.getStyleClass().add("primary");
 
         delete = new Button("Delete");
@@ -34,5 +34,9 @@ public class LetterItem extends HBox {
 
     public Button getDelete() {
         return delete;
+    }
+
+    public Button getOpen() {
+        return open;
     }
 }
