@@ -1,6 +1,7 @@
 package com.example.textredactor.ui;
 
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.engine.data.Data;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ public class MainMenu extends VBox {
     private SideBarButton settingsBtn;
     private SideBarButton main;
     private SideBarButton libraryBtn;
+    private SideBarButton men;
 
     private final VBox notificationBox = new VBox();
     private final Label notificationText = new Label();
@@ -28,10 +30,13 @@ public class MainMenu extends VBox {
         settingsBtn = new SideBarButton("Settings", "/icons/settings.png");
         main = new SideBarButton("Main", "/icons/main.png");
         libraryBtn = new SideBarButton("Library", "/icons/library.png");
+        men = new SideBarButton("Men", "/icons/fish.png");
 
-        main.setOnAction(e -> HelloApplication.showCard("General"));
-        settingsBtn.setOnAction(e -> HelloApplication.showCard("Settings"));
-        libraryBtn.setOnAction(e -> HelloApplication.showCard("Letters"));
+        main.setOnAction(e -> HelloApplication.showCard(Data.pageGeneral));
+        settingsBtn.setOnAction(e -> HelloApplication.showCard(Data.pageSettings));
+        libraryBtn.setOnAction(e -> HelloApplication.showCard(Data.pageLetters));
+        men.setOnAction(e -> HelloApplication.showCard(Data.pageManPage));
+
 
         initNotification();
 
@@ -42,6 +47,7 @@ public class MainMenu extends VBox {
                 main,
                 settingsBtn,
                 libraryBtn,
+                men,
                 spacer,
                 notificationBox
         );

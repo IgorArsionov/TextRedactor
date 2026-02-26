@@ -2,6 +2,7 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.CreateFile;
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.engine.model.Letter;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -59,7 +60,7 @@ public class Text extends VBox {
         Button back = new Button("← Back");
 
         back.setOnAction(e -> {
-            HelloApplication.showCard("Letters");
+            HelloApplication.showCard(Data.pageLetters);
         });
 
         Button save = new Button("Save");

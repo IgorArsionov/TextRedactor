@@ -1,10 +1,8 @@
 package com.example.textredactor;
 
 import com.example.textredactor.engine.Engine;
-import com.example.textredactor.pages.General;
-import com.example.textredactor.pages.Letters;
-import com.example.textredactor.pages.Settings;
-import com.example.textredactor.pages.Text;
+import com.example.textredactor.engine.data.Data;
+import com.example.textredactor.pages.*;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -27,10 +25,12 @@ public class HelloApplication extends Application {
         stage.setWidth(800);
         stage.setHeight(600);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
-        pages.put("General", new General());
-        pages.put("Settings", new Settings());
-        pages.put("Letters", new Letters());
-        pages.put("Text", new Text());
+        pages.put(Data.pageGeneral, new General());
+        pages.put(Data.pageSettings, new Settings());
+        pages.put(Data.pageLetters, new Letters());
+        pages.put(Data.pageText, new Text());
+        pages.put(Data.pageManPage, new ManPage());
+        pages.put(Data.pageAddManPage, new AddManPage());
 
         CreateFile createFile = CreateFile.init();
 
@@ -40,7 +40,7 @@ public class HelloApplication extends Application {
         VBox.setVgrow(vBox, Priority.ALWAYS);
         HBox.setHgrow(vBox, Priority.ALWAYS);
 
-        showCard("General");
+        showCard(Data.pageGeneral);
 
         Scene scene = new Scene(vBox);
         scene.getStylesheets().add(

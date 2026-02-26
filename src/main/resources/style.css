@@ -306,3 +306,79 @@
     -fx-background-color: rgba(200, 170, 60, 0.25);
     -fx-border-color: rgba(200, 170, 60, 0.5);
 }
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.accent-button {
+    -fx-background-color: #3a7afe;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+}
+
+.accent-button:hover {
+    -fx-background-color: #5b8cff;
+}
+
+/* ===== СПИСОК МУЖИКОВ ===== */
+.man-item {
+    -fx-background-color: rgba(255,255,255,0.04);
+    -fx-background-radius: 10;
+    -fx-padding: 6 10 6 10;
+}
+
+.man-item:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+
+/* Имя */
+.man-name {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+/* Страна и город */
+.man-meta {
+    -fx-text-fill: #c8c8c8;
+    -fx-font-size: 11px;
+}
+
+
+/* ===== КОМПАКТНЫЕ КНОПКИ ===== */
+
+.small-btn {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: #e8e8e8;
+
+    -fx-font-size: 11px;
+    -fx-padding: 4 10 4 10;
+
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+
+    -fx-border-color: rgba(255,255,255,0.05);
+}
+
+.small-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.12);
+}
+
+
+/* Кнопка Create new */
+.primary-btn {
+    -fx-background-color: rgba(90,140,255,0.18);
+    -fx-text-fill: #f0f4ff;
+
+    -fx-font-size: 12px;
+    -fx-padding: 5 12 5 12;
+
+    -fx-background-radius: 8;
+}
+
+.primary-btn:hover {
+    -fx-background-color: rgba(90,140,255,0.35);
+}

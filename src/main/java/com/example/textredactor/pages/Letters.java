@@ -2,6 +2,7 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.HelloApplication;
 import com.example.textredactor.engine.Engine;
+import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.engine.model.Letter;
 import com.example.textredactor.ui.LetterItem;
 import com.example.textredactor.ui.MainMenu;
@@ -75,7 +76,7 @@ public class Letters extends HBox {
             letterItem.getOpen().setOnAction(event -> {
                 Text text = (Text) HelloApplication.getCard("Text");
                 text.setLetter(letterStep);
-                HelloApplication.showCard("Text");
+                HelloApplication.showCard(Data.pageText);
             });
             listBox.getChildren().add(letterItem);
 
