@@ -57,6 +57,6 @@ public class Block extends HBox {
     }
 
     public String toString() {
-        return wordField.getText() + "=" + positionField.getText() + ";" + letterField.getText();
+        return wordField.getText().trim() + "=" + positionField.getText().trim() + ";" + letterField.getText().trim();
     }
 }

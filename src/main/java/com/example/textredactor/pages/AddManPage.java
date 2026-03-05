@@ -51,9 +51,10 @@ public class AddManPage extends VBox {
         descriptionArea.setPromptText("Description...");
         descriptionArea.setWrapText(true);
         descriptionArea.setPrefHeight(150);
-
+        Label description = new Label("Description");
+        description.setStyle("-fx-text-fill: #e6e6e6;");
         VBox descriptionBox = new VBox(6,
-                new Label("Description"),
+                description,
                 descriptionArea
         );
 
@@ -74,6 +75,7 @@ public class AddManPage extends VBox {
 
     private VBox createField(String labelText, TextField field) {
         Label label = new Label(labelText);
+        label.setStyle("-fx-text-fill: #e6e6e6;");
         VBox box = new VBox(5, label, field);
         VBox.setVgrow(field, Priority.NEVER);
         return box;

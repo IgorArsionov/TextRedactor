@@ -47,6 +47,10 @@ public class Engine {
         }
     }
 
+    public static Map<String, String> getShablon() {
+        return shablon;
+    }
+
     public static List<Letter> getLettersList() {
         lettersList.clear();
         lettersList = readerService.getLetters();

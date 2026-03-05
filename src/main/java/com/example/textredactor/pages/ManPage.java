@@ -1,27 +1,28 @@
 package com.example.textredactor.pages;
 
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.engine.model.Man;
 import com.example.textredactor.engine.service.ManService;
 import com.example.textredactor.engine.service.impl.ManServiceImpl;
-import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.ui.MainMenu;
+import com.example.textredactor.ui.ManItem;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
-import java.util.List;
-
 public class ManPage extends HBox {
 
     private final VBox left = new VBox();
     private final VBox right = new VBox();
-    private static VBox listBox;
+    private VBox listBox;
 
     private static final ManService manService = new ManServiceImpl();
 
     public ManPage() {
+        setSpacing(0);
+
         HBox.setHgrow(this, Priority.ALWAYS);
         VBox.setVgrow(this, Priority.ALWAYS);
 
@@ -34,7 +35,7 @@ public class ManPage extends HBox {
         left.getChildren().add(menu);
 
         initLayout();
-        refreshList();
+        initMenList();
     }
 
     private void initLayout() {
@@ -42,7 +43,7 @@ public class ManPage extends HBox {
 
         // Верхняя панель
         HBox topBar = new HBox();
-        topBar.setPadding(new Insets(5));
+        topBar.setPadding(new Insets(0, 0, 10, 0));
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -81,46 +82,26 @@ public class ManPage extends HBox {
     }
 
     /**
-     * Обновление списка Man
+     * Заполняем список мужчин
      */
-    public static void refreshList() {
-        if (listBox == null) return;
-
+    private void initMenList() {
         listBox.getChildren().clear();
 
-        List<Man> manList = manService.getManList();
+        for (Man man : manService.getManList()) {
+            ManItem item = new ManItem(man);
 
-        for (Man man : manList) {
-            HBox item = createManItem(man);
+            item.getOpenBtn().setOnAction(e -> {
+                System.out.println("Open man: " + man.getName());
+            });
+
             listBox.getChildren().add(item);
         }
     }
 
-    private static HBox createManItem(Man man) {
-        HBox item = new HBox(10);
-        item.getStyleClass().add("man-item");
-        item.setPadding(new Insets(8));
-
-        VBox info = new VBox(2);
-
-        javafx.scene.control.Label nameLabel =
-                new javafx.scene.control.Label(man.getName());
-        nameLabel.getStyleClass().add("man-name");
-
-        javafx.scene.control.Label meta =
-                new javafx.scene.control.Label(man.getCountry() + " • " + man.getCity());
-        meta.getStyleClass().add("man-meta");
-
-        info.getChildren().addAll(nameLabel, meta);
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        Button open = new Button("Open");
-        open.getStyleClass().add("small-btn");
-
-        item.getChildren().addAll(info, spacer, open);
-
-        return item;
+    /**
+     * Метод обновления списка
+     */
+    public void refreshList() {
+        initMenList();
     }
 }

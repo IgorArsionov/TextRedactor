@@ -2,6 +2,7 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.CreateFile;
 import com.example.textredactor.HelloApplication;
+import com.example.textredactor.engine.Engine;
 import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.ui.Block;
 import com.example.textredactor.ui.MainMenu;
@@ -131,7 +132,7 @@ public class Settings extends HBox {
                 builder.append(block.toString());
                 builder.append("\n");
             }
-
+            //TODO: обновление шаблона слов без перезапуска приложения
             createFile.writeFile(builder.toString());
             HelloApplication.showCard(Data.pageGeneral);
             General general = (General) HelloApplication.getCard("General");
