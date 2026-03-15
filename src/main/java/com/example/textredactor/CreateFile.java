@@ -1,6 +1,8 @@
 package com.example.textredactor;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,6 @@ public class CreateFile {
 
     private final File file;
     private final File folder;
-    private String folderName = "letters";
     private final List<String> words = new ArrayList<>();
 
     public static CreateFile init() {
@@ -20,29 +21,36 @@ public class CreateFile {
     }
 
     private CreateFile() {
-        String name = "words.txt";
-        folder = new File(folderName);
-        if (!folder.exists()) {
-            boolean mkdir = folder.mkdir();
-            System.out.println("Folder created: " + mkdir);
-        }
-        file = new File(name);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException("Can't create file: " + name, e);
+        try {
+            Path appDir = Path.of(System.getProperty("user.home"), "TextRedactor");
+            Path lettersDir = appDir.resolve("letters");
+            Path wordsFile = appDir.resolve("words.txt");
+
+            Files.createDirectories(appDir);
+            Files.createDirectories(lettersDir);
+
+            if (!Files.exists(wordsFile)) {
+                Files.createFile(wordsFile);
             }
+
+            folder = lettersDir.toFile();
+            file = wordsFile.toFile();
+
+            System.out.println("App dir: " + appDir);
+            System.out.println("Words file: " + file.getAbsolutePath());
+            System.out.println("Letters dir: " + folder.getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException("Can't initialize app files", e);
         }
     }
 
     public List<String> getText() {
+        words.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 words.add(line);
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,28 +60,30 @@ public class CreateFile {
     public void writeFile(String text) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             bw.write(text);
-            System.out.println("Successfully wrote to the file." + file.getPath());
+            System.out.println("Successfully wrote to file: " + file.getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private File CreateFileByName(String nameFile) {
+    private File createFileByName(String nameFile) {
         String name = nameFile + ".txt";
-        File file = new File(folderName + "/" + name);
-        if (!file.exists()) {
+        File newFile = new File(folder, name);
+
+        if (!newFile.exists()) {
             try {
-                file.createNewFile();
+                boolean created = newFile.createNewFile();
+                System.out.println("Created letter file: " + created + " -> " + newFile.getAbsolutePath());
             } catch (IOException e) {
                 throw new RuntimeException("Can't create file: " + name, e);
             }
         }
 
-        return file;
+        return newFile;
     }
 
     public void writeFileByName(String text, String name) {
-        File newFile = CreateFileByName(name);
+        File newFile = createFileByName(name);
         writeToFile(newFile, text);
     }
 
@@ -84,14 +94,15 @@ public class CreateFile {
     private void writeToFile(File file, String text) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             bw.write(text);
-            System.out.println("Successfully wrote to the file." + file.getPath());
+            System.out.println("Successfully wrote to file: " + file.getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public File[] getFiles() {
-        return folder.listFiles();
+        File[] files = folder.listFiles();
+        return files != null ? files : new File[0];
     }
 
     public String getLetterFromFile(File file) {
