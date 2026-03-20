@@ -8,7 +8,12 @@ public class Man {
 
     public Man() {
     }
-    public Man(String name, String country, String city, String description) {}
+    public Man(String name, String country, String city, String description) {
+        this.name = name;
+        this.country = country;
+        this.city = city;
+        this.description = description;
+    }
 
     public String getName() {
         return name;
@@ -40,5 +45,15 @@ public class Man {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Man{" +
+                "name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

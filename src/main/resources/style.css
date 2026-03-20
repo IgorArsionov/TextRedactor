@@ -86,6 +86,13 @@
     );
 }
 
+.button:pressed {
+    /* имитация "утопления" */
+    -fx-background-color: linear-gradient(to bottom, #232428, #1c1d21);
+    -fx-translate-y: 1px;
+    -fx-effect: null;
+}
+
 .button.primary {
     -fx-background-color: linear-gradient(
             to bottom,

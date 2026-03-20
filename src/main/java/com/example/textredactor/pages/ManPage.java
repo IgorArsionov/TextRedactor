@@ -2,6 +2,7 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.HelloApplication;
 import com.example.textredactor.engine.data.Data;
+import com.example.textredactor.engine.file.ManFileManager;
 import com.example.textredactor.engine.model.Man;
 import com.example.textredactor.engine.service.ManService;
 import com.example.textredactor.engine.service.impl.ManServiceImpl;
@@ -33,6 +34,9 @@ public class ManPage extends HBox {
         MainMenu menu = new MainMenu(12);
         VBox.setVgrow(menu, Priority.ALWAYS);
         left.getChildren().add(menu);
+
+        ManFileManager manFileManager = ManFileManager.init();
+        manFileManager.readFileContent(Man.class);
 
         initLayout();
         initMenList();

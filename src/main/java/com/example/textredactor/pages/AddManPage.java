@@ -2,12 +2,17 @@ package com.example.textredactor.pages;
 
 import com.example.textredactor.HelloApplication;
 import com.example.textredactor.engine.data.Data;
+import com.example.textredactor.engine.file.ManFileManager;
+import com.example.textredactor.engine.service.ManService;
+import com.example.textredactor.engine.service.impl.ManServiceImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class AddManPage extends VBox {
+    private final ManService manService = new ManServiceImpl();
 
     private TextField nameField = new TextField();
     private TextField countryField = new TextField();
@@ -63,6 +68,16 @@ public class AddManPage extends VBox {
 
         backBtn.setOnAction(e -> {
             HelloApplication.showCard(Data.pageManPage);
+            ManPage manPage = (ManPage) HelloApplication.getCard(Data.pageManPage);
+            manPage.refreshList();
+        });
+
+        createBtn.setOnAction(e -> {
+            manService.addMan(
+                    nameField.getText(),
+                    countryField.getText(),
+                    cityField.getText(),
+                    descriptionArea.getText());
         });
 
         HBox buttonBox = new HBox(10, backBtn, createBtn);

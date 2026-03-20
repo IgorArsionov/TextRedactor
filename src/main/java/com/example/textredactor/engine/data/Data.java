@@ -7,6 +7,9 @@ import java.util.List;
 
 public class Data {
     public List<Man> manList;
+
+    public static String folderModel = "Models";
+
     public static String pageGeneral = "General";
     public static String pageSettings = "Settings";
     public static String pageLetters = "Letters";
@@ -27,7 +30,12 @@ public class Data {
         return data;
     }
 
-    public void addMan(String name, String county, String city, String description) {
-        manList.add(new Man(name, county, city, description));
+    public Man addMan(String name, String county, String city, String description) {
+        Man man = new Man(name, county, city, description);
+        manList.add(man);
+        return man;
+    }
+    public void addMan(Man man) {
+        manList.add(man);
     }
 }
