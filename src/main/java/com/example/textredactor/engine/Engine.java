@@ -23,7 +23,7 @@ public class Engine {
     private static ReaderService readerService = new ReaderServiceImpl();
 
     public String Start(String text, String nameFile) {
-        String[] words = text.split(" ");
+        String[] words = text.split("[ —]");
         StringBuilder sb = new StringBuilder();
 
         List<Word> list = Arrays.stream(words)

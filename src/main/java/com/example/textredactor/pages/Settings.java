@@ -130,7 +130,7 @@ public class Settings extends HBox {
             createFile.writeFile(builder.toString());
             Engine.setShablon(createFile.getText());
             HelloApplication.showCard(Data.pageGeneral);
-            General general = (General) HelloApplication.getCard("General");
+            General general = (General) HelloApplication.getCard(Data.pageGeneral);
             general.getMenu().showSuccess("Настройки сохранены");
         });
 

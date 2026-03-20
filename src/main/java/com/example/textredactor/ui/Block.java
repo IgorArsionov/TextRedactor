@@ -11,7 +11,7 @@ public class Block extends HBox {
 
     public Block(String[] data) {
         super(10);
-        init(data[0], data[1].split(";")[0], data[1].split(";")[1]);
+        init(data[0].trim(), data[1].split(";")[0].trim(), data[1].split(";")[1].trim());
     }
 
     public Block() {
