@@ -11,37 +11,12 @@ public class Block extends HBox {
 
     public Block(String[] data) {
         super(10);
-        wordField = new TextField();
-        wordField.setPromptText("Слово");
-        wordField.setPrefColumnCount(15);
-        wordField.setText(data[0]);
-        wordField.setPrefWidth(100);
+        init(data[0], data[1].split(";")[0], data[1].split(";")[1]);
+    }
 
-        positionField = new TextField();
-        positionField.setPromptText("Позиция");
-        positionField.setPrefColumnCount(3);
-        positionField.setText(data[1].split(";")[0]);
-
-        letterField = new TextField();
-        letterField.setPromptText("Буква");
-        letterField.setPrefColumnCount(15);
-        letterField.setText(data[1].split(";")[1]);
-        letterField.setPrefWidth(100);
-
-        CheckBox autoPositionCheckBox = new CheckBox("All");
-
-        autoPositionCheckBox
-                .selectedProperty()
-                .addListener((obs, oldVal, newVal) -> {
-                    if (newVal) {
-                        positionField.setText("0");
-                        positionField.setDisable(true);
-                    } else {
-                        positionField.setDisable(false);
-                    }
-                });
-
-        getChildren().addAll(wordField, positionField, letterField, autoPositionCheckBox);
+    public Block() {
+        super(10);
+        init("", "", "");
     }
 
     public String getWordField() {
@@ -58,5 +33,39 @@ public class Block extends HBox {
 
     public String toString() {
         return wordField.getText().trim() + "=" + positionField.getText().trim() + ";" + letterField.getText().trim();
+    }
+
+    private void init(String v1, String v2, String v3) {
+        wordField = new TextField();
+        wordField.setPromptText("Слово");
+        wordField.setPrefColumnCount(15);
+        wordField.setText(v1);
+        wordField.setPrefWidth(100);
+
+        positionField = new TextField();
+        positionField.setPromptText("Позиция");
+        positionField.setPrefColumnCount(3);
+        positionField.setText(v2);
+
+        letterField = new TextField();
+        letterField.setPromptText("Буква");
+        letterField.setPrefColumnCount(15);
+        letterField.setText(v3);
+        letterField.setPrefWidth(100);
+
+        CheckBox autoPositionCheckBox = new CheckBox("All");
+
+        autoPositionCheckBox
+                .selectedProperty()
+                .addListener((obs, oldVal, newVal) -> {
+                    if (newVal) {
+                        positionField.setText("0");
+                        positionField.setDisable(true);
+                    } else {
+                        positionField.setDisable(false);
+                    }
+                });
+
+        getChildren().addAll(wordField, positionField, letterField, autoPositionCheckBox);
     }
 }

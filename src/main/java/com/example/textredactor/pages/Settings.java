@@ -82,22 +82,17 @@ public class Settings extends HBox {
     }
 
     private void initWords() {
-        String fileName = "words.txt";
-        File file = new File(fileName);
+        List<String> lines = createFile.getText();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
+        for (String line : lines) {
+            line = line.trim();
 
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-
-                if (!line.isEmpty()) {
-                    String[] strings = line.split("=");
+            if (!line.isEmpty()) {
+                String[] strings = line.split("=", 2);
+                if (strings.length == 2) {
                     blockList.add(new Block(strings));
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Can't read file words: " + fileName, e);
         }
     }
 
@@ -109,7 +104,7 @@ public class Settings extends HBox {
         Button buttonAddNewBlock = new Button("Add++");
 
         buttonAddNewBlock.setOnAction(e -> {
-            Block newBlock = new Block(new String[]{"", " ; "});
+            Block newBlock = new Block();
             blockList.add(newBlock);
             vBox.getChildren().add(newBlock);
         });
@@ -132,8 +127,8 @@ public class Settings extends HBox {
                 builder.append(block.toString());
                 builder.append("\n");
             }
-            //TODO: обновление шаблона слов без перезапуска приложения
             createFile.writeFile(builder.toString());
+            Engine.setShablon(createFile.getText());
             HelloApplication.showCard(Data.pageGeneral);
             General general = (General) HelloApplication.getCard("General");
             general.getMenu().showSuccess("Настройки сохранены");

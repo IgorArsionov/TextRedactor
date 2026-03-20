@@ -41,6 +41,7 @@ public class Engine {
     }
 
     public static void setShablon(List<String> words) {
+        shablon.clear();
         for (int i = 0; i < words.size(); i++) {
             String[] value = words.get(i).split("=");
             shablon.put(value[0], value[1]);
