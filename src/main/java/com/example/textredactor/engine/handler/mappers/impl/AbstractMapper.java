@@ -20,11 +20,12 @@ public abstract class AbstractMapper<T> implements Mapper {
             //TODO: check if it already not exists
             currentClass = null;
         }
-
-        apply(parameter);
+        String key = parameter.split(":", 1)[0];
+        String paramValue = parameter.split(":", 1)[1];
+        apply(key, paramValue);
 
     }
 
-    protected abstract void apply(String value);
+    protected abstract void apply(String key, String value);
     protected abstract T createObject();
 }
