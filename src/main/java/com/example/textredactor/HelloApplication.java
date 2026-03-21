@@ -34,6 +34,7 @@ public class HelloApplication extends Application {
         pages.put(Data.pageText, new Text());
         pages.put(Data.pageManPage, new ManPage());
         pages.put(Data.pageAddManPage, new AddManPage());
+        pages.put(Data.pageManView, new ManViewPage());
 
         CreateFile createFile = CreateFile.init();
 

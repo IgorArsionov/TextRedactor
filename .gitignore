@@ -5,6 +5,7 @@ target/
 .kotlin
 words.txt
 letters/
+Models/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

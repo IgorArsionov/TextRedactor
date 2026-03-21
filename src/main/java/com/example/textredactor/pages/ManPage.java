@@ -9,6 +9,7 @@ import com.example.textredactor.engine.service.impl.ManServiceImpl;
 import com.example.textredactor.ui.MainMenu;
 import com.example.textredactor.ui.ManItem;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
@@ -95,7 +96,9 @@ public class ManPage extends HBox {
             ManItem item = new ManItem(man);
 
             item.getOpenBtn().setOnAction(e -> {
-                System.out.println("Open man: " + man.getName());
+                ManViewPage card = (ManViewPage) HelloApplication.getCard(Data.pageManView);
+                card.setMan(man);
+                HelloApplication.showCard(Data.pageManView);
             });
 
             listBox.getChildren().add(item);

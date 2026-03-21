@@ -15,8 +15,7 @@ public class ManServiceImpl implements ManService {
 
     @Override
     public void addMan(String name, String county, String city, String description) {
-        Man man = data.addMan(name, county, city, description);
-        manFileManager.writeFileContent(man);
+        manFileManager.writeFileContent(data.addMan(name, county, city, description));
     }
 
     @Override

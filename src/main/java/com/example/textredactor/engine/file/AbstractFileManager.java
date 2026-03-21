@@ -13,12 +13,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public abstract class AbstractFileManager {
+    protected static final String NEW_LINE_TOKEN = "[[NL]]";
     protected final ModelHandler modelHandler = new ModelHandlerImpl();
     protected Mapper mapper;
     protected File currentFile;
 
-    protected void setFile(File file) {
-        currentFile = file;
+    public void setFile(String fileName) {
+        currentFile = new File(Data.folderModel, fileName);
     }
 
     protected void createFile(String fileName) {
@@ -38,6 +39,9 @@ public abstract class AbstractFileManager {
 
     public void readFileContent(Class<?> clazz) {
         mapper = modelHandler.getMapper(clazz);
+        if (!currentFile.exists()) {
+            return;
+        }
         try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -51,6 +55,21 @@ public abstract class AbstractFileManager {
         }
     }
 
-    public abstract void writeFileContent(Man man);
+    public abstract <T> void writeFileContent(T value);
+
+    protected String encodeText(String text) {
+        if (text == null) {
+            return "";
+        }
+        return text.replace("\r\n", NEW_LINE_TOKEN)
+                .replace("\n", NEW_LINE_TOKEN);
+    }
+
+    public static String decodeText(String text) {
+        if (text == null) {
+            return "";
+        }
+        return text.replace(NEW_LINE_TOKEN, "\n");
+    }
 
 }

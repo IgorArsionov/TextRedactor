@@ -13,12 +13,19 @@ public class ManMapper extends AbstractMapper<Man> {
 
     public ManMapper() {
         setters = new HashMap<>();
+        setters.put("id", v -> {
+            checkObjectExists("id");
+            checkValueExists("id", v);
+            currentObject.setId(Integer.parseInt(v));
+        });
         setters.put("name", v -> {
             checkObjectExists("name");
+            checkValueExists("name", v);
             currentObject.setName(v);
         });
         setters.put("country", v -> {
             checkObjectExists("country");
+            checkValueExists("country", v);
             currentObject.setCountry(v);
         });
         setters.put("city", v -> {
@@ -26,7 +33,6 @@ public class ManMapper extends AbstractMapper<Man> {
             currentObject.setCity(v);
         });
         setters.put("description", v -> {
-            checkObjectExists("description");
             currentObject.setDescription(v);
         });
     }
@@ -48,7 +54,6 @@ public class ManMapper extends AbstractMapper<Man> {
         if (setter == null) {
             throw new InvalidFileFormatException("Unknown field: " + key);
         }
-        checkValueExists(key, value);
         setters.get(key).accept(value);
     }
 }

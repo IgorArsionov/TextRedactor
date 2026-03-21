@@ -390,3 +390,110 @@
 .primary-btn:hover {
     -fx-background-color: rgba(90,140,255,0.35);
 }
+
+.man-info-panel {
+    -fx-background-color: rgba(255,255,255,0.02);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-padding: 6 8;
+}
+
+.inline-info-item {
+    -fx-background-color: transparent;
+    -fx-padding: 1 4 1 4;
+    -fx-background-radius: 4;
+}
+
+.inline-info-item:hover {
+    -fx-background-color: rgba(255,255,255,0.05);
+    -fx-cursor: hand;
+}
+
+.inline-info-title {
+    -fx-text-fill: #9ea5ae;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}
+
+.inline-info-value {
+    -fx-text-fill: #ececec;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}
+
+.man-inline-desc-box {
+    -fx-background-color: transparent;
+    -fx-padding: 2 4 0 4;
+}
+
+.man-inline-desc-title {
+    -fx-text-fill: #aeb4bc;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}
+
+.man-inline-desc-value {
+    -fx-text-fill: #e5e5e5;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}
+
+.mini-section-title {
+    -fx-text-fill: #d8d8d8;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.mini-description-box {
+    -fx-background-color: rgba(255,255,255,0.02);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(255,255,255,0.04);
+    -fx-padding: 6 8;
+}
+
+.mini-description-text {
+    -fx-text-fill: #e8e8e8;
+    -fx-font-size: 11px;
+}
+
+.record-item {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(255,255,255,0.04);
+    -fx-padding: 5 8;
+}
+
+.record-item:hover {
+    -fx-background-color: rgba(255,255,255,0.06);
+}
+
+.record-text {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 11px;
+}
+
+.record-delete-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #7f8790;
+    -fx-font-size: 12px;
+    -fx-padding: 0 2 0 2;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+
+    -fx-pref-height: 16;
+    -fx-min-height: 16;
+    -fx-max-height: 16;
+
+    -fx-pref-width: 16;
+    -fx-min-width: 16;
+    -fx-max-width: 16;
+}
+
+.record-delete-btn:hover {
+    -fx-text-fill: #ff7a7a;
+    -fx-background-color: rgba(255,80,80,0.08);
+}

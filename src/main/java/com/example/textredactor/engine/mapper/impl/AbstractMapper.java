@@ -1,6 +1,7 @@
 package com.example.textredactor.engine.mapper.impl;
 
 import com.example.textredactor.engine.exception.InvalidFileFormatException;
+import com.example.textredactor.engine.file.AbstractFileManager;
 import com.example.textredactor.engine.mapper.Mapper;
 
 public abstract class AbstractMapper<T> implements Mapper {
@@ -31,7 +32,7 @@ public abstract class AbstractMapper<T> implements Mapper {
             throw new InvalidFileFormatException("Invalid key: " + value);
         }
         String key = parts[0].trim();
-        String field = parts[1].trim();
+        String field = AbstractFileManager.decodeText(parts[1].trim());
 
         applyField(key, field);
     }
