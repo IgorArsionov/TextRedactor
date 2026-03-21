@@ -1,5 +1,6 @@
 package com.example.textredactor.engine.handler.mappers.impl;
 
+import com.example.textredactor.engine.data.Data;
 import com.example.textredactor.engine.model.Text;
 
 import java.util.HashMap;
@@ -11,11 +12,11 @@ public class TextMapper extends AbstractMapper<Text> {
 
     public TextMapper() {
         mappers.put("id", v -> {
-            //TODO: checkout
+            checkExists(v);
             currentClass.setId(Integer.parseInt(v));
         });
         mappers.put("text", v -> {
-            //TODO: checkout
+            checkExists(v);
             currentClass.setText(v);
         });
     }
@@ -26,6 +27,12 @@ public class TextMapper extends AbstractMapper<Text> {
         if (mapper != null) {
             mapper.accept(value);
         }
+    }
+
+    @Override
+    protected void saveObject(Text object) {
+        checkExistsObject(object);
+        Data.TEXTS.add(object);
     }
 
     @Override

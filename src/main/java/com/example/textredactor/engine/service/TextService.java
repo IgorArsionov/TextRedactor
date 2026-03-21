@@ -1,5 +1,6 @@
 package com.example.textredactor.engine.service;
 
+import com.example.textredactor.engine.mapper.TextFormatResult;
 import com.example.textredactor.engine.model.Text;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface TextService {
 
     Text getTextById(int id);
 
-    void saveText(Text text);
+    Text saveText(String text);
 
-    String processText(String text);
+    TextFormatResult processText(String text);
 }
