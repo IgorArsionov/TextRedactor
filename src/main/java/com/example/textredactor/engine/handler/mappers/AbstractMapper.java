@@ -1,4 +1,4 @@
 package com.example.textredactor.engine.handler.mappers;
 
-public class AbstractMapper {
+public abstract class AbstractMapper<T> {
 }
