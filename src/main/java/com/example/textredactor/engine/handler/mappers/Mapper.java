@@ -1,4 +1,5 @@
 package com.example.textredactor.engine.handler.mappers;
 
-public abstract class AbstractMapper<T> implements Mapper {
+public interface Mapper {
+    <T> T map(Object source);
 }
