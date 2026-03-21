@@ -1,11 +1,10 @@
-package com.example.textredactor.engine.handler.mappers;
+package com.example.textredactor.engine.handler.mappers.impl;
 
 import com.example.textredactor.engine.exception.MappingProcessException;
+import com.example.textredactor.engine.handler.mappers.Mapper;
 
 public abstract class AbstractMapper<T> implements Mapper {
     protected T currentClass;
-
-
 
     public void map(String value) {
         if (value == null) {

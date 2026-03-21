@@ -1,6 +1,5 @@
 package com.example.textredactor.engine.handler;
 
-import com.example.textredactor.engine.handler.mappers.AbstractMapper;
 import com.example.textredactor.engine.handler.mappers.Mapper;
 
 import java.util.HashMap;
