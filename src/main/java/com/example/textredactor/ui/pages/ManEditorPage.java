@@ -3,6 +3,7 @@ package com.example.textredactor.ui.pages;
 import com.example.textredactor.engine.AppFacade;
 import com.example.textredactor.engine.model.Man;
 import com.example.textredactor.ui.i18n.I18n;
+import com.example.textredactor.ui.layout.MainLayout;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -45,6 +46,13 @@ public class ManEditorPage extends VBox {
     }
 
     private HBox createHeader() {
+        Button backButton = new Button(I18n.get("man.editor.back"));
+        backButton.getStyleClass().add("ghost-button");
+        backButton.setOnAction(e -> {
+            MainLayout.getManPage().reload();
+            MainLayout.showPage("mans");
+        });
+
         Label title = new Label(I18n.get("man.editor.title"));
         title.getStyleClass().add("page-title");
 
@@ -60,7 +68,7 @@ public class ManEditorPage extends VBox {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox header = new HBox(16, titleBox, spacer, newButton);
+        HBox header = new HBox(16, backButton, titleBox, spacer, newButton);
         header.setAlignment(Pos.CENTER_LEFT);
 
         return header;
@@ -162,9 +170,7 @@ public class ManEditorPage extends VBox {
         label.getStyleClass().add("card-title");
         label.setStyle("-fx-font-size: 12px; -fx-font-weight: normal;");
 
-        VBox box = new VBox(6, label, field);
-        VBox.setVgrow(field, Priority.NEVER);
-        return box;
+        return new VBox(6, label, field);
     }
 
     private VBox createLabeledArea(String labelText, TextArea area) {
@@ -172,9 +178,7 @@ public class ManEditorPage extends VBox {
         label.getStyleClass().add("card-title");
         label.setStyle("-fx-font-size: 12px; -fx-font-weight: normal;");
 
-        VBox box = new VBox(6, label, area);
-        VBox.setVgrow(area, Priority.ALWAYS);
-        return box;
+        return new VBox(6, label, area);
     }
 
     public void setMan(Man man) {
@@ -185,11 +189,11 @@ public class ManEditorPage extends VBox {
 
         currentManId = man.getId();
 
-        nameField.setText(safe(man.getName()));
-        countryField.setText(safe(man.getCountry()));
-        cityField.setText(safe(man.getCity()));
-        timeZoneField.setText(safe(man.getTimeZone()));
-        descriptionArea.setText(safe(man.getDescription()));
+        nameField.setText(normalizeForField(man.getName()));
+        countryField.setText(normalizeForField(man.getCountry()));
+        cityField.setText(normalizeForField(man.getCity()));
+        timeZoneField.setText(normalizeForField(man.getTimeZone()));
+        descriptionArea.setText(normalizeForField(man.getDescription()));
         tagsField.setText(buildTagsString(man.getTags()));
 
         hideStatus();
@@ -199,11 +203,11 @@ public class ManEditorPage extends VBox {
         currentManId = null;
 
         nameField.clear();
-        countryField.setText("--");
-        cityField.setText("--");
-        timeZoneField.setText("--");
+        countryField.clear();
+        cityField.clear();
+        timeZoneField.clear();
         tagsField.clear();
-        descriptionArea.setText("--");
+        descriptionArea.clear();
 
         setStatus(I18n.get("man.editor.newDraft"), false);
     }
@@ -216,7 +220,7 @@ public class ManEditorPage extends VBox {
         String description = safeInput(descriptionArea.getText(), "--");
         Set<String> tags = parseTags(tagsField.getText());
 
-        if (name.isBlank() || name.equals("--")) {
+        if (name.isBlank()) {
             setStatus(I18n.get("man.editor.nameRequired"), false);
             return;
         }
@@ -225,11 +229,13 @@ public class ManEditorPage extends VBox {
             Man created = appFacade.saveMan(name, country, city, description, timeZone, tags);
             currentManId = created.getId();
             setStatus(I18n.get("man.editor.saved"), true);
+            MainLayout.getManPage().reload();
             return;
         }
 
         appFacade.updateMan(currentManId, name, country, city, description, timeZone, tags);
         setStatus(I18n.get("man.editor.updated"), true);
+        MainLayout.getManPage().reload();
     }
 
     private void deleteMan() {
@@ -239,6 +245,7 @@ public class ManEditorPage extends VBox {
         }
 
         appFacade.deleteMan(currentManId);
+        MainLayout.getManPage().reload();
         resetForNewMan();
         setStatus(I18n.get("man.editor.deleted"), true);
     }
@@ -261,8 +268,8 @@ public class ManEditorPage extends VBox {
         return String.join(", ", tags);
     }
 
-    private String safe(String value) {
-        return value == null || value.isBlank() ? "--" : value;
+    private String normalizeForField(String value) {
+        return value == null || value.equals("--") ? "" : value;
     }
 
     private String safeInput(String value) {

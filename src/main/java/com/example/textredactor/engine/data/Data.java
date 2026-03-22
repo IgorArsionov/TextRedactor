@@ -1,6 +1,7 @@
 package com.example.textredactor.engine.data;
 
 import com.example.textredactor.engine.model.Man;
+import com.example.textredactor.engine.model.ManRecord;
 import com.example.textredactor.engine.model.Text;
 
 import java.io.File;
@@ -13,7 +14,9 @@ public class Data {
     public static final List<Text> TEXTS = new ArrayList<>();
     public static final Map<String, String> sample = new HashMap<>();
     public static final List<Man> MEN = new ArrayList<>();
+    public static final List<ManRecord> MAN_RECORDS = new ArrayList<>();
 
+    public static final String MAN_RECORD_FILE_NAME = "man-records.txt";
     public static final String APP_FOLDER_NAME = "TextRedactor";
     public static final String MODELS_FOLDER_NAME = "Models";
     public static final String TEXT_FILE_NAME = "text.txt";

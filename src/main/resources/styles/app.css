@@ -372,3 +372,77 @@
     -fx-font-size: 10px;
     -fx-padding: 3 8 3 8;
 }
+
+.text-area {
+    -fx-prompt-text-fill: #8e97a3;
+}
+
+.notes-input-area {
+    -fx-pref-row-count: 8;
+}
+
+.notes-input-area .content {
+    -fx-background-color: #171a20;
+}
+
+.notes-input-area .viewport {
+    -fx-background-color: #171a20;
+}
+
+.notes-input-area .corner {
+    -fx-background-color: #171a20;
+}
+
+.record-item {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: rgba(255,255,255,0.04);
+    -fx-max-width: Infinity;
+}
+
+.record-item:hover {
+    -fx-background-color: rgba(255,255,255,0.05);
+}
+
+.record-text {
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 11px;
+}
+
+.record-delete-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #7f8790;
+    -fx-font-size: 12px;
+    -fx-padding: 0 2 0 2;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-pref-height: 16;
+    -fx-min-height: 16;
+    -fx-max-height: 16;
+    -fx-pref-width: 16;
+    -fx-min-width: 16;
+    -fx-max-width: 16;
+}
+
+.record-delete-btn:hover {
+    -fx-text-fill: #ff7a7a;
+    -fx-background-color: rgba(255,80,80,0.08);
+}
+
+.man-detail-label {
+    -fx-text-fill: #98a1ad;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.man-detail-value {
+    -fx-text-fill: #edf0f5;
+    -fx-font-size: 12px;
+}
+
+.man-detail-description {
+    -fx-text-fill: #d8dde5;
+    -fx-font-size: 12px;
+}

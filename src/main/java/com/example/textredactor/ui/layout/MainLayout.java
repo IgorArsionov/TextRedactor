@@ -3,19 +3,21 @@ package com.example.textredactor.ui.layout;
 import com.example.textredactor.ui.i18n.I18n;
 import com.example.textredactor.ui.navigation.PageManager;
 import com.example.textredactor.ui.navigation.Sidebar;
-import com.example.textredactor.ui.pages.DashboardPage;
-import com.example.textredactor.ui.pages.ManPage;
-import com.example.textredactor.ui.pages.ReplacementsPage;
-import com.example.textredactor.ui.pages.TextsPage;
+import com.example.textredactor.ui.pages.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
 public class MainLayout extends HBox {
 
-    private final PageManager pageManager = new PageManager();
+    private static PageManager pageManager;
+    private static ManPage manPage;
+    private static ManEditorPage manEditorPage;
+    private static ManDetailsPage manDetailsPage;
 
     public MainLayout() {
         getStyleClass().add("app-root");
+
+        pageManager = new PageManager();
 
         Sidebar sidebar = new Sidebar(pageManager);
 
@@ -29,13 +31,34 @@ public class MainLayout extends HBox {
     }
 
     private void registerPages() {
+        manPage = new ManPage();
+        manEditorPage = new ManEditorPage();
+        manDetailsPage = new ManDetailsPage();
+
         pageManager.registerPage("dashboard", new DashboardPage());
         pageManager.registerPage("texts", new TextsPage());
-        pageManager.registerPage("mans", createPlaceholder(I18n.get("sidebar.mans")));
+        pageManager.registerPage("mans", manPage);
+        pageManager.registerPage("manEditor", manEditorPage);
+        pageManager.registerPage("manDetails", manDetailsPage);
         pageManager.registerPage("settings", new ReplacementsPage());
-        pageManager.registerPage("mans", new ManPage());
 
         pageManager.showPage("dashboard");
+    }
+
+    public static void showPage(String key) {
+        pageManager.showPage(key);
+    }
+
+    public static ManPage getManPage() {
+        return manPage;
+    }
+
+    public static ManEditorPage getManEditorPage() {
+        return manEditorPage;
+    }
+
+    public static ManDetailsPage getManDetailsPage() {
+        return manDetailsPage;
     }
 
     private VBox createPlaceholder(String titleText) {

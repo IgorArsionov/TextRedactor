@@ -27,7 +27,7 @@ public class ManServiceImpl implements ManService {
 
     @Override
     public Man getManById(int id) {
-        return Data.MEN.get(id);
+        return findManById(id);
     }
 
     @Override
@@ -40,39 +40,75 @@ public class ManServiceImpl implements ManService {
             Set<String> tags
     ) {
         Man man = new Man();
-        man.setId(Data.MEN.size());
+        man.setId(generateNextManId());
         man.setName(name);
         man.setCountry(country);
         man.setCity(city);
         man.setDescription(description);
         man.setTimeZone(timeZone);
         man.setTags(tags);
+
         Data.MEN.add(man);
         manRepository.saveMan(man);
+
         return man;
     }
 
     @Override
-    public Man updateMan(int id, String name, String country, String city, String description, String timeZone, Set<String> tags) {
-        Man man = Data.MEN.get(id);
+    public Man updateMan(
+            int id,
+            String name,
+            String country,
+            String city,
+            String description,
+            String timeZone,
+            Set<String> tags
+    ) {
+        Man man = findManById(id);
+
+        if (man == null) {
+            return null;
+        }
+
         man.setName(name);
         man.setCountry(country);
         man.setCity(city);
         man.setDescription(description);
         man.setTimeZone(timeZone);
         man.setTags(tags);
+
         manRepository.updateMan(Data.MEN);
         return man;
     }
 
     @Override
     public void deleteMan(int id) {
-        Data.MEN.remove(id);
+        Man man = findManById(id);
+
+        if (man == null) {
+            return;
+        }
+
+        Data.MEN.remove(man);
         manRepository.updateMan(Data.MEN);
     }
 
     @Override
     public void readMan() {
         manRepository.readMan();
+    }
+
+    private int generateNextManId() {
+        return Data.MEN.stream()
+                .mapToInt(Man::getId)
+                .max()
+                .orElse(-1) + 1;
+    }
+
+    private Man findManById(int id) {
+        return Data.MEN.stream()
+                .filter(man -> man.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

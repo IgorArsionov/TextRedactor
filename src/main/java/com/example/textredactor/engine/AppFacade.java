@@ -9,6 +9,9 @@ import com.example.textredactor.engine.service.TextService;
 import com.example.textredactor.engine.service.impl.ManServiceImpl;
 import com.example.textredactor.engine.service.impl.SampleServiceImpl;
 import com.example.textredactor.engine.service.impl.TextServiceImpl;
+import com.example.textredactor.engine.model.ManRecord;
+import com.example.textredactor.engine.service.ManRecordService;
+import com.example.textredactor.engine.service.impl.ManRecordServiceImpl;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,11 +20,13 @@ public class AppFacade {
     private final TextService textService = new TextServiceImpl();
     private final SampleService sampleService = new SampleServiceImpl();
     private final ManService manService = new ManServiceImpl();
+    private final ManRecordService manRecordService = new ManRecordServiceImpl();
     private static boolean initialized = false;
 
     public AppFacade() {
         if (!initialized) {
             textService.readText();
+            manRecordService.readRecords();
             initialized = true;
         }
     }
@@ -84,6 +89,18 @@ public class AppFacade {
 
     public Man updateMan(int id, String name, String country, String city, String description, String timeZone, Set<String> tags) {
         return manService.updateMan(id, name, country, city, description, timeZone, tags);
+    }
+
+    public List<ManRecord> getRecordsByManId(int manId) {
+        return manRecordService.getRecordsByManId(manId);
+    }
+
+    public ManRecord addRecord(int manId, String text) {
+        return manRecordService.addRecord(manId, text);
+    }
+
+    public void deleteRecord(int recordId) {
+        manRecordService.deleteRecord(recordId);
     }
 
 }

@@ -21,17 +21,22 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public Text getTextById(int id) {
-        return Data.TEXTS.get(id);
+        return Data.TEXTS.stream()
+                .filter(text -> text.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public Text saveText(String title, String text) {
         Text model = new Text();
-        model.setId(Data.TEXTS.size());
+        model.setId(generateNextTextId());
         model.setTitle(title);
         model.setText(text);
+
         Data.TEXTS.add(model);
         textRepository.saveText(model);
+
         return model;
     }
 
@@ -42,20 +47,40 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public Text updateText(int id, String title, String text) {
-        Data.TEXTS.get(id).setTitle(title);
-        Data.TEXTS.get(id).setText(text);
+        Text existing = getTextById(id);
+
+        if (existing == null) {
+            return null;
+        }
+
+        existing.setTitle(title);
+        existing.setText(text);
+
         textRepository.updateText(Data.TEXTS);
-        return Data.TEXTS.get(id);
+        return existing;
     }
 
     @Override
     public void deleteText(int id) {
-        Data.TEXTS.remove(id);
+        Text existing = getTextById(id);
+
+        if (existing == null) {
+            return;
+        }
+
+        Data.TEXTS.remove(existing);
         textRepository.updateText(Data.TEXTS);
     }
 
     @Override
     public void readText() {
         textRepository.readText();
+    }
+
+    private int generateNextTextId() {
+        return Data.TEXTS.stream()
+                .mapToInt(Text::getId)
+                .max()
+                .orElse(-1) + 1;
     }
 }
