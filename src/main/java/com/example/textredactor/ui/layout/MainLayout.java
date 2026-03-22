@@ -4,6 +4,8 @@ import com.example.textredactor.ui.i18n.I18n;
 import com.example.textredactor.ui.navigation.PageManager;
 import com.example.textredactor.ui.navigation.Sidebar;
 import com.example.textredactor.ui.pages.DashboardPage;
+import com.example.textredactor.ui.pages.ManPage;
+import com.example.textredactor.ui.pages.ReplacementsPage;
 import com.example.textredactor.ui.pages.TextsPage;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -30,7 +32,8 @@ public class MainLayout extends HBox {
         pageManager.registerPage("dashboard", new DashboardPage());
         pageManager.registerPage("texts", new TextsPage());
         pageManager.registerPage("mans", createPlaceholder(I18n.get("sidebar.mans")));
-        pageManager.registerPage("settings", createPlaceholder(I18n.get("sidebar.settings")));
+        pageManager.registerPage("settings", new ReplacementsPage());
+        pageManager.registerPage("mans", new ManPage());
 
         pageManager.showPage("dashboard");
     }

@@ -19,6 +19,7 @@ public class TextsPage extends VBox {
 
     private final VBox listBox = new VBox(6);
 
+    private final TextField searchField = new TextField();
     private final TextField titleField = new TextField();
     private final Label editorStatus = new Label();
     private final TextArea editorArea = new TextArea();
@@ -56,10 +57,13 @@ public class TextsPage extends VBox {
 
         VBox titleBox = new VBox(4, title, subtitle);
 
-        TextField searchField = new TextField();
         searchField.setPromptText(I18n.get("texts.search"));
         searchField.getStyleClass().add("search-field");
         searchField.setMaxWidth(260);
+
+        searchField.textProperty().addListener((obs, oldValue, newValue) -> {
+            filterTexts(newValue);
+        });
 
         Button newButton = new Button(I18n.get("texts.new"));
         newButton.getStyleClass().add("primary-button");
@@ -131,6 +135,9 @@ public class TextsPage extends VBox {
         Button copyButton = new Button(I18n.get("texts.editor.copy"));
         copyButton.getStyleClass().add("ghost-button");
 
+        Button deleteButton = new Button(I18n.get("texts.editor.delete"));
+        deleteButton.getStyleClass().add("ghost-button");
+
         Button saveButton = new Button(I18n.get("texts.editor.save"));
         saveButton.getStyleClass().add("primary-button");
 
@@ -160,6 +167,21 @@ public class TextsPage extends VBox {
             setStatusCopied();
         });
 
+        deleteButton.setOnAction(e -> {
+            if (currentTextId == null) {
+                return;
+            }
+
+            appFacade.deleteText(currentTextId);
+            clearSelection();
+            showEmptyState();
+            loadTextsFromFacade();
+
+            editorStatus.setText(I18n.get("texts.editor.deleted"));
+            editorStatus.getStyleClass().remove("saved");
+            showStatus();
+        });
+
         saveButton.setOnAction(e -> {
             if (!editorArea.isVisible()) {
                 return;
@@ -176,19 +198,28 @@ public class TextsPage extends VBox {
             }
 
             if (creatingNew || currentTextId == null) {
-                Text created = appFacade.createText(title, text);
-                currentTextId = created.getId();
-                creatingNew = false;
-                setStatusSaved();
+                appFacade.createText(title, text);
                 loadTextsFromFacade();
+                resetEditorForNewText(false);
+
+                editorStatus.setText(I18n.get("texts.editor.saved"));
+                if (!editorStatus.getStyleClass().contains("saved")) {
+                    editorStatus.getStyleClass().add("saved");
+                }
+                showStatus();
                 return;
             }
 
-            // updateText ещё не готов в engine
-            setStatusPendingUpdate();
+            Text updated = appFacade.updateText(currentTextId, title, text);
+            if (updated != null) {
+                currentTextId = updated.getId();
+            }
+
+            setStatusSaved();
+            loadTextsFromFacade();
         });
 
-        HBox leftActions = new HBox(8, processButton, copyButton);
+        HBox leftActions = new HBox(8, processButton, copyButton, deleteButton);
 
         HBox actionBar = new HBox();
         Region spacer = new Region();
@@ -215,9 +246,38 @@ public class TextsPage extends VBox {
     }
 
     private void loadTextsFromFacade() {
+        filterTexts(searchField.getText());
+    }
+
+    private void filterTexts(String query) {
+        List<Text> allTexts = appFacade.getAllTexts();
+
+        if (query == null || query.isBlank()) {
+            renderTexts(allTexts);
+            return;
+        }
+
+        String normalized = query.trim().toLowerCase();
+
+        List<Text> filtered = allTexts.stream()
+                .filter(text ->
+                        safe(text.getTitle()).toLowerCase().contains(normalized)
+                                || safe(text.getText()).toLowerCase().contains(normalized)
+                )
+                .toList();
+
+        renderTexts(filtered);
+    }
+
+    private void renderTexts(List<Text> texts) {
         listBox.getChildren().clear();
 
-        List<Text> texts = appFacade.getAllTexts();
+        if (texts.isEmpty()) {
+            Label emptyLabel = new Label(I18n.get("texts.list.notFound"));
+            emptyLabel.getStyleClass().add("empty-state-label");
+            listBox.getChildren().add(emptyLabel);
+            return;
+        }
 
         for (Text text : texts) {
             listBox.getChildren().add(createTextItem(text));
@@ -235,6 +295,11 @@ public class TextsPage extends VBox {
         VBox item = new VBox(3, titleLabel, metaLabel);
         item.getStyleClass().add("text-item");
         item.setPadding(new Insets(10, 12, 10, 12));
+
+        if (currentTextId != null && currentTextId == text.getId()) {
+            item.getStyleClass().add("active");
+            selectedItem = item;
+        }
 
         item.setOnMouseClicked(e -> {
             selectItem(item);
@@ -265,6 +330,10 @@ public class TextsPage extends VBox {
     }
 
     private void resetEditorForNewText() {
+        resetEditorForNewText(true);
+    }
+
+    private void resetEditorForNewText(boolean showDraftStatus) {
         loadingText = true;
         creatingNew = true;
         currentTextId = null;
@@ -276,7 +345,12 @@ public class TextsPage extends VBox {
         editorArea.clear();
 
         showEditor();
-        setStatusNewDraft();
+
+        if (showDraftStatus) {
+            setStatusNewDraft();
+        } else {
+            hideStatus();
+        }
 
         loadingText = false;
     }
@@ -356,12 +430,6 @@ public class TextsPage extends VBox {
         showStatus();
     }
 
-    private void setStatusPendingUpdate() {
-        editorStatus.setText(I18n.get("texts.editor.updatePending"));
-        editorStatus.getStyleClass().remove("saved");
-        showStatus();
-    }
-
     private void showStatus() {
         editorStatus.setVisible(true);
         editorStatus.setManaged(true);
@@ -382,5 +450,9 @@ public class TextsPage extends VBox {
         return normalized.length() > 42
                 ? normalized.substring(0, 42) + "..."
                 : normalized;
+    }
+
+    private String safe(String value) {
+        return value == null ? "" : value;
     }
 }

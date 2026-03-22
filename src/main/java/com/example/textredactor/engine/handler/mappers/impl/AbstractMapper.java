@@ -25,8 +25,14 @@ public abstract class AbstractMapper<T> implements Mapper {
             currentClass = null;
             return;
         }
-        String key = parameter.split(":", 1)[0];
-        String paramValue = parameter.split(":", 1)[1];
+        String[] values = parameter.split(":", 2);
+
+        if (values.length != 2) {
+            throw new MappingProcessException("Invalid parameter format");
+        }
+
+        String key = values[0];
+        String paramValue = values[1];
 
         apply(key, paramValue);
 

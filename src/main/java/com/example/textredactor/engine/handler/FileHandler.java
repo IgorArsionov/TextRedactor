@@ -1,7 +1,9 @@
 package com.example.textredactor.engine.handler;
 
 import com.example.textredactor.engine.handler.mappers.Mapper;
+import com.example.textredactor.engine.handler.mappers.impl.ManMapper;
 import com.example.textredactor.engine.handler.mappers.impl.TextMapper;
+import com.example.textredactor.engine.model.Man;
 import com.example.textredactor.engine.model.Text;
 
 import java.util.HashMap;
@@ -14,6 +16,7 @@ public class FileHandler {
     private FileHandler() {
         mapperMap = new HashMap<>();
         mapperMap.put(Text.class, new TextMapper());
+        mapperMap.put(Man.class, new ManMapper());
     }
 
     public static FileHandler getInstance() {

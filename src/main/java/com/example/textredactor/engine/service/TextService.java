@@ -17,4 +17,6 @@ public interface TextService {
     Text updateText(int id, String title, String text);
 
     void deleteText(int id);
+
+    void readText();
 }

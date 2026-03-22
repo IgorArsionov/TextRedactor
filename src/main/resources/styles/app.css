@@ -274,3 +274,101 @@
     -fx-text-fill: #8f98a3;
     -fx-font-size: 11px;
 }
+
+.rule-item {
+    -fx-background-color: #1a1d25;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: rgba(255,255,255,0.04);
+}
+
+.rule-item:hover {
+    -fx-background-color: #20242d;
+}
+
+.rule-from {
+    -fx-text-fill: #ebedf2;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.rule-arrow {
+    -fx-text-fill: #7eaefc;
+    -fx-font-size: 12px;
+}
+
+.rule-to {
+    -fx-text-fill: #cfd5dd;
+    -fx-font-size: 12px;
+}
+
+.rule-delete-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #8b93a0;
+    -fx-font-size: 12px;
+    -fx-padding: 0 4 0 4;
+    -fx-pref-height: 20;
+    -fx-min-height: 20;
+    -fx-max-height: 20;
+    -fx-pref-width: 20;
+    -fx-min-width: 20;
+    -fx-max-width: 20;
+}
+
+.rule-delete-button:hover {
+    -fx-text-fill: #ff7a7a;
+    -fx-background-color: rgba(255,80,80,0.08);
+}
+
+.man-item {
+    -fx-background-color: #1a1d25;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.04);
+    -fx-cursor: hand;
+}
+
+.man-item:hover {
+    -fx-background-color: #20242d;
+}
+
+.man-item.active {
+    -fx-background-color: rgba(78,161,255,0.16);
+    -fx-border-color: rgba(78,161,255,0.25);
+}
+
+.man-item-name {
+    -fx-text-fill: #edf0f5;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.man-item-meta {
+    -fx-text-fill: #98a1ad;
+    -fx-font-size: 11px;
+}
+
+.man-item-description {
+    -fx-text-fill: #d8dde5;
+    -fx-font-size: 12px;
+}
+
+.man-timezone-label {
+    -fx-text-fill: #8e97a3;
+    -fx-font-size: 11px;
+}
+
+.man-tags-pane {
+    -fx-padding: 2 0 0 0;
+}
+
+.man-tag {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-text-fill: #dfe4ea;
+    -fx-font-size: 10px;
+    -fx-padding: 3 8 3 8;
+}

@@ -16,7 +16,6 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<Text> getAllTexts() {
-        textRepository.readText();
         return Data.TEXTS;
     }
 
@@ -43,11 +42,20 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public Text updateText(int id, String title, String text) {
-        return null;
+        Data.TEXTS.get(id).setTitle(title);
+        Data.TEXTS.get(id).setText(text);
+        textRepository.updateText(Data.TEXTS);
+        return Data.TEXTS.get(id);
     }
 
     @Override
     public void deleteText(int id) {
+        Data.TEXTS.remove(id);
+        textRepository.updateText(Data.TEXTS);
+    }
 
+    @Override
+    public void readText() {
+        textRepository.readText();
     }
 }

@@ -6,6 +6,8 @@ import com.example.textredactor.engine.handler.FileHandler;
 import com.example.textredactor.engine.model.Text;
 import com.example.textredactor.engine.repository.TextRepository;
 import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
 
 public class TextRepositoryImpl implements TextRepository {
 
@@ -17,6 +19,14 @@ public class TextRepositoryImpl implements TextRepository {
     @Override
     public void readText() {
         Data.createIfMissing(Data.MODELS_FOLDER);
+
+        try {
+            if (Files.notExists(textFile.toPath())) {
+                Files.createFile(textFile.toPath());
+            }
+        } catch (IOException e) {
+            throw new FileException("Failed to create man file", e);
+        }
 
         String line;
 
@@ -33,9 +43,6 @@ public class TextRepositoryImpl implements TextRepository {
                     String decoded = decode(raw);
                     line = "text:" + decoded;
                 }
-                System.out.println("=======");
-                System.out.println(fileHandler.getMapper(Text.class));
-                System.out.println("=======");
 
                 fileHandler.getMapper(Text.class).map(line);
             }
@@ -49,14 +56,19 @@ public class TextRepositoryImpl implements TextRepository {
         Data.createIfMissing(Data.MODELS_FOLDER);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true))) {
-            writer.write("{\n");
-            writer.write("id:" + text.getId() + "\n");
-            writer.write("title:" + text.getTitle() + "\n");
+            writeToFile(writer, text);
+        } catch (IOException e) {
+            throw new FileException("Error writing file: " + e.getMessage());
+        }
+    }
 
-            String encodedText = encode(text.getText());
-            writer.write("text:" + encodedText + "\n");
+    @Override
+    public void updateText(List<Text> texts) {
 
-            writer.write("}\n");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, false))) {
+            for (Text text : texts) {
+                writeToFile(writer, text);
+            }
         } catch (IOException e) {
             throw new FileException("Error writing file: " + e.getMessage());
         }
@@ -78,5 +90,16 @@ public class TextRepositoryImpl implements TextRepository {
         }
 
         return text.replace(NEW_LINE_TOKEN, "\n");
+    }
+
+    private void writeToFile(BufferedWriter writer, Text text) throws IOException {
+        writer.write("{\n");
+        writer.write("id:" + text.getId() + "\n");
+        writer.write("title:" + text.getTitle() + "\n");
+
+        String encodedText = encode(text.getText());
+        writer.write("text:" + encodedText + "\n");
+
+        writer.write("}\n");
     }
 }
