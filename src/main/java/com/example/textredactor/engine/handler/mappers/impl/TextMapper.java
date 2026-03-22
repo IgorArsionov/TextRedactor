@@ -15,6 +15,10 @@ public class TextMapper extends AbstractMapper<Text> {
             checkExists(v);
             currentClass.setId(Integer.parseInt(v));
         });
+        mappers.put("title", v -> {
+            checkExists(v);
+            currentClass.setTitle(v);
+        });
         mappers.put("text", v -> {
             checkExists(v);
             currentClass.setText(v);

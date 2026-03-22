@@ -16,6 +16,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<Text> getAllTexts() {
+        textRepository.readText();
         return Data.TEXTS;
     }
 
@@ -25,10 +26,11 @@ public class TextServiceImpl implements TextService {
     }
 
     @Override
-    public Text saveText(String text) {
+    public Text saveText(String title, String text) {
         Text model = new Text();
-        model.setText(text);
         model.setId(Data.TEXTS.size());
+        model.setTitle(title);
+        model.setText(text);
         Data.TEXTS.add(model);
         textRepository.saveText(model);
         return model;
@@ -37,5 +39,15 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextFormatResult processText(String text) {
         return textFormatMapper.map(text);
+    }
+
+    @Override
+    public Text updateText(int id, String title, String text) {
+        return null;
+    }
+
+    @Override
+    public void deleteText(int id) {
+
     }
 }

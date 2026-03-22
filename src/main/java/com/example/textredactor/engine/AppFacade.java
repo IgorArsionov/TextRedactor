@@ -17,8 +17,8 @@ public class AppFacade {
         return textService.getTextById(id);
     }
 
-    public Text createText(String text) {
-        return textService.saveText(text);
+    public Text createText(String title, String text) {
+        return textService.saveText(title, text);
     }
 
     public TextFormatResult processText(String text) {

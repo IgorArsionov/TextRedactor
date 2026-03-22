@@ -33,6 +33,9 @@ public class TextRepositoryImpl implements TextRepository {
                     String decoded = decode(raw);
                     line = "text:" + decoded;
                 }
+                System.out.println("=======");
+                System.out.println(fileHandler.getMapper(Text.class));
+                System.out.println("=======");
 
                 fileHandler.getMapper(Text.class).map(line);
             }
@@ -48,6 +51,7 @@ public class TextRepositoryImpl implements TextRepository {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(textFile, true))) {
             writer.write("{\n");
             writer.write("id:" + text.getId() + "\n");
+            writer.write("title:" + text.getTitle() + "\n");
 
             String encodedText = encode(text.getText());
             writer.write("text:" + encodedText + "\n");

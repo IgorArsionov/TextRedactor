@@ -14,16 +14,16 @@ public abstract class AbstractMapper<T> implements Mapper {
         }
         String parameter = value.trim();
         if (parameter.equals("{")) {
-            //TODO: check if it exists
             checkNotExistsObject(currentClass);
             currentClass = createObject();
+            return;
         }
 
         if (parameter.equals("}")) {
-            //TODO: check if it already not exists
-            saveObject(currentClass);
             checkExistsObject(currentClass);
+            saveObject(currentClass);
             currentClass = null;
+            return;
         }
         String key = parameter.split(":", 1)[0];
         String paramValue = parameter.split(":", 1)[1];
@@ -52,5 +52,12 @@ public abstract class AbstractMapper<T> implements Mapper {
         if (object != null) {
             throw new MappingProcessException("Object already exists");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractMapper{" +
+                "currentClass=" + currentClass +
+                '}';
     }
 }

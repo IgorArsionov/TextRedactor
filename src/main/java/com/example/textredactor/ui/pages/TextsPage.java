@@ -1,5 +1,8 @@
 package com.example.textredactor.ui.pages;
 
+import com.example.textredactor.engine.AppFacade;
+import com.example.textredactor.engine.mapper.TextFormatResult;
+import com.example.textredactor.engine.model.Text;
 import com.example.textredactor.ui.i18n.I18n;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +11,11 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
 
+import java.util.List;
+
 public class TextsPage extends VBox {
+
+    private final AppFacade appFacade = new AppFacade();
 
     private final VBox listBox = new VBox(6);
 
@@ -20,6 +27,7 @@ public class TextsPage extends VBox {
     private VBox selectedItem;
     private boolean loadingText = false;
     private boolean creatingNew = false;
+    private Integer currentTextId = null;
 
     public TextsPage() {
         getStyleClass().add("page");
@@ -34,7 +42,7 @@ public class TextsPage extends VBox {
 
         initEditorListeners();
         showEmptyState();
-        loadDemoTexts();
+        loadTextsFromFacade();
 
         getChildren().addAll(header, content);
     }
@@ -131,13 +139,13 @@ public class TextsPage extends VBox {
                 return;
             }
 
-            // TODO: подключить facade
-            // String processedText = textFacade.process(editorArea.getText());
-            // loadingText = true;
-            // editorArea.setText(processedText);
-            // loadingText = false;
+            TextFormatResult result = appFacade.processText(editorArea.getText());
 
-            setStatusUnsaved();
+            loadingText = true;
+            editorArea.setText(result.text());
+            loadingText = false;
+
+            setStatusUnsavedWithCount(result.replacedCount());
         });
 
         copyButton.setOnAction(e -> {
@@ -157,10 +165,27 @@ public class TextsPage extends VBox {
                 return;
             }
 
-            // TODO: подключить facade
-            // textFacade.save(...)
+            String title = titleField.getText() == null ? "" : titleField.getText().trim();
+            String text = editorArea.getText() == null ? "" : editorArea.getText();
 
-            setStatusSaved();
+            if (title.isEmpty()) {
+                editorStatus.setText(I18n.get("texts.editor.titleRequired"));
+                editorStatus.getStyleClass().remove("saved");
+                showStatus();
+                return;
+            }
+
+            if (creatingNew || currentTextId == null) {
+                Text created = appFacade.createText(title, text);
+                currentTextId = created.getId();
+                creatingNew = false;
+                setStatusSaved();
+                loadTextsFromFacade();
+                return;
+            }
+
+            // updateText ещё не готов в engine
+            setStatusPendingUpdate();
         });
 
         HBox leftActions = new HBox(8, processButton, copyButton);
@@ -189,55 +214,22 @@ public class TextsPage extends VBox {
         });
     }
 
-    private void loadDemoTexts() {
+    private void loadTextsFromFacade() {
         listBox.getChildren().clear();
 
-        listBox.getChildren().addAll(
-                createTextItem(
-                        1L,
-                        "Partnership Reply",
-                        "Client communication",
-                        """
-                        Hello,
+        List<Text> texts = appFacade.getAllTexts();
 
-                        Thank you for your message.
-                        We reviewed your proposal and would like to continue the discussion.
-
-                        Best regards,
-                        Igor
-                        """
-                ),
-                createTextItem(
-                        2L,
-                        "Delivery Follow-up",
-                        "Important draft",
-                        """
-                        Good afternoon,
-
-                        I wanted to check if there are any updates regarding the shipment.
-                        Please let me know the expected delivery window.
-
-                        Thank you.
-                        """
-                ),
-                createTextItem(
-                        3L,
-                        "Short Note",
-                        "Personal draft",
-                        """
-                        Reminder:
-                        update internal notes
-                        and check the man records later.
-                        """
-                )
-        );
+        for (Text text : texts) {
+            listBox.getChildren().add(createTextItem(text));
+        }
     }
 
-    private VBox createTextItem(Long id, String title, String meta, String content) {
-        Label titleLabel = new Label(title);
+    private VBox createTextItem(Text text) {
+        Label titleLabel = new Label(text.getTitle());
         titleLabel.getStyleClass().add("text-item-title");
 
-        Label metaLabel = new Label(meta);
+        String preview = buildPreview(text.getText());
+        Label metaLabel = new Label(preview);
         metaLabel.getStyleClass().add("text-item-meta");
 
         VBox item = new VBox(3, titleLabel, metaLabel);
@@ -246,19 +238,25 @@ public class TextsPage extends VBox {
 
         item.setOnMouseClicked(e -> {
             selectItem(item);
-            openText(id, title, content);
+            openTextById(text.getId());
         });
 
         return item;
     }
 
-    private void openText(Long id, String title, String content) {
+    private void openTextById(int id) {
+        Text text = appFacade.getTextById(id);
+        if (text == null) {
+            return;
+        }
+
         loadingText = true;
         creatingNew = false;
+        currentTextId = text.getId();
 
         titleField.setDisable(false);
-        titleField.setText(title);
-        editorArea.setText(content);
+        titleField.setText(text.getTitle());
+        editorArea.setText(text.getText());
 
         showEditor();
         hideStatus();
@@ -269,6 +267,7 @@ public class TextsPage extends VBox {
     private void resetEditorForNewText() {
         loadingText = true;
         creatingNew = true;
+        currentTextId = null;
 
         clearSelection();
 
@@ -311,6 +310,9 @@ public class TextsPage extends VBox {
         titleField.clear();
         titleField.setDisable(true);
 
+        currentTextId = null;
+        creatingNew = false;
+
         hideStatus();
     }
 
@@ -324,6 +326,12 @@ public class TextsPage extends VBox {
 
     private void setStatusUnsaved() {
         editorStatus.setText(I18n.get("texts.editor.unsaved"));
+        editorStatus.getStyleClass().remove("saved");
+        showStatus();
+    }
+
+    private void setStatusUnsavedWithCount(int count) {
+        editorStatus.setText(count + " " + I18n.get("texts.editor.changedWords"));
         editorStatus.getStyleClass().remove("saved");
         showStatus();
     }
@@ -348,6 +356,12 @@ public class TextsPage extends VBox {
         showStatus();
     }
 
+    private void setStatusPendingUpdate() {
+        editorStatus.setText(I18n.get("texts.editor.updatePending"));
+        editorStatus.getStyleClass().remove("saved");
+        showStatus();
+    }
+
     private void showStatus() {
         editorStatus.setVisible(true);
         editorStatus.setManaged(true);
@@ -357,5 +371,16 @@ public class TextsPage extends VBox {
         editorStatus.setVisible(false);
         editorStatus.setManaged(false);
         editorStatus.getStyleClass().remove("saved");
+    }
+
+    private String buildPreview(String text) {
+        if (text == null || text.isBlank()) {
+            return I18n.get("texts.list.emptyPreview");
+        }
+
+        String normalized = text.replace("\n", " ").replace("\r", " ").trim();
+        return normalized.length() > 42
+                ? normalized.substring(0, 42) + "..."
+                : normalized;
     }
 }
