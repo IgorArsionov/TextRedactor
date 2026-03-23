@@ -1,18 +1,23 @@
 package com.example.textredactor.engine.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Man {
+    private int id;
     private String name;
     private String country;
     private String city;
     private String description;
+    private String timeZone;
+    private Set<String> tags = new HashSet<>();
 
-    public Man() {
+    public int getId() {
+        return id;
     }
-    public Man(String name, String country, String city, String description) {
-        this.name = name;
-        this.country = country;
-        this.city = city;
-        this.description = description;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -47,13 +52,19 @@ public class Man {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Man{" +
-                "name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
     }
 }
